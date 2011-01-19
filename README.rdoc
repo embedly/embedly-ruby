@@ -1,0 +1,3 @@
+= embedly
+
+Ruby Embedly client
