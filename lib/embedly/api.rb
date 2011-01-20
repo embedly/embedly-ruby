@@ -2,23 +2,16 @@ require 'net/http'
 require 'json'
 require 'ostruct'
 
-# = Embedly::API =
-#
 # Performs api calls to embedly.
 #
 # You won't find methods.  We are using method_missing and passing the method
 # name to apicall.  
 #
-# == Parameters ==
-# :+endpoint+: Hostname of embedly server.  Defaults to api.embed.ly if no key
-# is provided, pro.embed.ly if key is provided.
-# :+key+: Your pro.embed.ly api key.
+# === Currently Supported Methods
 #
-# == Currently Supported Methods ==
-#
-#  * +oembed+
-#  * +objectify+
-#  * +preview+ _pro-only_
+# * +oembed+
+# * +objectify+
+# * +preview+ _pro-only_
 #
 # Call parameters should be passed as the opts parameter.  If set, key will
 # automatically be added to the query string of the call, so no need to set it.  
@@ -34,10 +27,10 @@ require 'ostruct'
 class Embedly::API
   attr_reader :key, :endpoint, :api_version
 
-  # = Parameters =
-  # :+endpoint+: Hostname of embedly server.  Defaults to api.embed.ly if no key
-  # is provided, pro.embed.ly if key is provided.
-  # :+key+: Your pro.embed.ly api key.
+  # === Options
+  #
+  # [:+endpoint+] Hostname of embedly server.  Defaults to api.embed.ly if no key is provided, pro.embed.ly if key is provided.
+  # [:+key+] Your pro.embed.ly api key.
   def initialize opts={}
     @key = opts[:key]
     if @key
@@ -49,15 +42,18 @@ class Embedly::API
     @api_versions = Hash.new('1').merge!({'objectify' => '2'})
   end
 
+  # <b>Use methods oembed, objectify, preview in favor of this method.</b>
+  #
   # Normalizes url and urls parameters and calls the endpoint.  url OR urls
   # must be present
   #
-  # == Options ==
-  # :+url+: _(optional)_ A single url
-  # :+urls+: _(optional)_ An array of urls
-  # :+action+: The method that should be called. ex. oembed, objectify, preview
-  # :+version+: The api version number.
-  # _others_: All other parameters are used as query strings.
+  # === Options
+  #
+  # [:+url+] _(optional)_ A single url
+  # [:+urls+] _(optional)_ An array of urls
+  # [:+action+] The method that should be called. ex. oembed, objectify, preview
+  # [:+version+] The api version number.
+  # [_others_] All other parameters are used as query strings.
   def apicall opts
     opts[:urls] ||= []
     opts[:urls] << opts[:url] if opts[:url]
@@ -99,14 +95,13 @@ class Embedly::API
     end
   end
 
-  private
   # Performs api call based on method name
   #
-  # == Currently supported ==
+  # === Currently supported
   #
-  #  * +oembed+
-  #  * +objectify+
-  #  * +preview+ _pro-only_
+  # - +oembed+
+  # - +objectify+
+  # - +preview+ _pro-only_
   #
   def method_missing(name, *args, &block)
     opts = args[0]
@@ -115,6 +110,7 @@ class Embedly::API
     apicall opts
   end
 
+  private
   # Escapes url parameters
   # TODO: move to utils
   def escape s
