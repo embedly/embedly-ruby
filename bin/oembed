@@ -1,11 +1,67 @@
 #!/usr/bin/env ruby
 $:.unshift(File.expand_path('../../lib', __FILE__))
-%w{embedly json}.each {|l| require l}
+%w{embedly json optparse ostruct}.each {|l| require l}
 
-Embedly::VERSION
-urls = ARGV
-api = Embedly::API.new
-urls.each do |url|
-  obj = api.oembed :url => url
-  puts JSON.pretty_generate(obj.marshal_dump)
+options = OpenStruct.new({
+  :endpoint => nil,
+  :key => nil,
+  :verbose => false,
+  :args => {}
+})
+
+action = File.basename(__FILE__)
+
+opts = OptionParser.new do |opts|
+  opts.banner = <<-DOC
+Fetch JSON from the embedly #{action} service.
+Usage #{action} [OPTIONS] <url> [url] ..
+  DOC
+
+  opts.separator ""
+  opts.separator "Options:"
+  
+  opts.on("-e", "--endpoint ENDPOINT",
+          "Embedly host.  If key is present, default is pro.embed.ly, else " +
+          "it is api.embed.ly.") do |e|
+    options.endpoint = e
+  end
+
+  opts.on("-k", "--key KEY", "Embedly PRO key") do |k|
+    options.key = k
+  end
+
+  opts.on("-o", "--option NAME=VALUE", "Set option to be passed as query param.") do |o|
+    k,v = o.split('=')
+    options.args[k] = v
+  end
+
+  opts.separator ""
+  opts.separator "Common Options:"
+
+  opts.on("-v", "--verbose", "Run verbosely") do
+    options.verbose = true
+  end
+
+  opts.on("-h", "--help", "Display this message") do
+    puts opts
+    exit
+  end
+
+  opts.separator ""
+  opts.separator "Bob Corsaro <bob@embed.ly>"
 end
+
+opts.parse!
+
+if ARGV.size < 1
+  $stderr.puts "ERROR: url required"
+  $stderr.puts opts
+  exit 1
+end
+
+Embedly::Config.logging = true if options.verbose
+
+options.args[:urls] = ARGV
+api = Embedly::API.new options.marshal_dump
+objs = api.send(action, options.args)
+puts JSON.pretty_generate(objs.marshal_dump)

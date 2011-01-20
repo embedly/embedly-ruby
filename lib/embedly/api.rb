@@ -41,6 +41,7 @@ class Embedly::API
   def initialize opts={}
     @key = opts[:key]
     if @key
+      logger.debug('using pro')
       @endpoint = opts[:endpoint] || 'pro.embed.ly'
     else
       @endpoint = opts[:endpoint] || 'api.embed.ly'
