@@ -5,12 +5,14 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "embedly"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.summary = %Q{Ruby Embedly client library}
+    gem.description = %Q{Ruby Embedly client library}
     gem.email = "bob@embed.ly"
-    gem.homepage = "http://github.com/dokipen/embedly"
+    gem.homepage = "http://github.com/embedly/embedly-ruby"
     gem.authors = ["Bob Corsaro"]
-    gem.add_development_dependency "thoughtbot-shoulda", ">= 0"
+    gem.add_dependency "typhoeus", ">= 0"
+    gem.add_development_dependency "cucumber", ">= 0"
+    gem.add_development_dependency "jeweler", ">= 0"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
@@ -23,6 +25,15 @@ Rake::TestTask.new(:test) do |test|
   test.libs << 'lib' << 'test'
   test.pattern = 'test/**/test_*.rb'
   test.verbose = true
+end
+
+begin
+  require 'cucumber/rake/task'
+  Cucumber::Rake::Task.new(:features)
+rescue LoadError
+  task :features do
+    abort "Cucumber is not installed"
+  end
 end
 
 begin

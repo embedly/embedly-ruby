@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+$:.unshift(File.expand_path('../../lib', __FILE__))
+%w{embedly json}.each {|l| require l}
+
+Embedly::VERSION
+urls = ARGV
+api = Embedly::API.new :endpoint => 'http://localhost:8001'
+urls.each do |url|
+  obj = api.preview :url => url
+  puts JSON.pretty_generate(obj.marshal_dump)
+end
