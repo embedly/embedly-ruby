@@ -36,10 +36,7 @@ begin
     g.branch = 'gh-pages'
     g.push_to = 'origin'
     g.message = 'Updated website'
-
-    g.directory 'website'
-    g.directory 'rdoc', 'doc'
-    g.file 'README.rdoc'
+    g.directory 'rdoc'
   end
 rescue LoadError
   task :publish do
