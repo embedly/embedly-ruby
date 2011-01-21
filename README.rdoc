@@ -36,7 +36,6 @@ If you would like cutting edge, then you can clone and install HEAD.
     :wmode => 'transparent',
     :method => 'after'
   )
-  puts obj.marshal_dump
   json_obj = JSON.pretty_generate(objs.collect{|o| o.marshal_dump})
   puts json_obj
 
