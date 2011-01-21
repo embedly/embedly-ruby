@@ -7,8 +7,9 @@ module Embedly
 
   def self.logger(name)
     @_loggers ||= {}
-    logger = @_loggers[name] ||= Logger.new(STDOUT)
-    logger.level = Embedly::Config.logging ? Logger::DEBUG : Logger::ERROR
+    logging = Embedly::Config.logging
+    logger = @_loggers[name] ||= Logger.new(STDERR)
+    logger.level = logging ? Logger::DEBUG : Logger::ERROR
     logger
   end
 end
