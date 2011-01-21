@@ -17,6 +17,7 @@ begin
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
+
 rescue LoadError
   puts "Jeweler (or a dependency) not available. Install it with: gem install jeweler"
 end
@@ -31,16 +32,13 @@ rescue LoadError
 end
 
 begin
-  require 'grancher/task'
-  Grancher::Task.new do |g|
-    g.branch = 'gh-pages'
-    g.push_to = 'origin'
-    g.message = 'Updated website'
-    g.directory 'rdoc'
+  require 'yard'
+  YARD::Rake::YardocTask.new do |t|
+      t.files = FileList['lib/**/*.rb'].exclude('lib/jeweler/templates/**/*.rb')
   end
 rescue LoadError
-  task :publish do
-    abort "Grancher is not installed"
+  task :yard do
+    abort "Yard is not installed"
   end
 end
 

@@ -2,4 +2,6 @@ Gemfile.lock
 embedly.gemspec
 pkg/
 rdoc/
+doc/
+.yardoc/
 
