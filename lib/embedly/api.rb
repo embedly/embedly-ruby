@@ -5,7 +5,7 @@ require 'ostruct'
 # Performs api calls to embedly.
 #
 # You won't find methods.  We are using method_missing and passing the method
-# name to apicall.  
+# name to apicall.
 #
 # === Currently Supported Methods
 #
@@ -13,8 +13,13 @@ require 'ostruct'
 # * +objectify+
 # * +preview+ _pro-only_
 #
+# All methods return ostructs, so fields can be accessed with the dot operator. ex.
+#
+#   api = Embedly::API.new
+#   obj = api.oembed(:url => 
+#
 # Call parameters should be passed as the opts parameter.  If set, key will
-# automatically be added to the query string of the call, so no need to set it.  
+# automatically be added to the query string of the call, so no need to set it.
 #
 # This API _would_ be future compatible, if not for the version.  In order to
 # add support for a new method, you will need to add a version to the
@@ -67,7 +72,9 @@ class Embedly::API
     end
 
     params[:key] = key if key
-    params.merge!opts.select{|k,_| not [:url, :urls, :action, :version].index k}
+    params.merge!Hash[
+      opts.select{|k,_| not [:url, :urls, :action, :version].index k}
+    ]
 
     path = "/#{opts[:version]}/#{opts[:action]}?#{q params}"
     logger.debug { "calling http://#{endpoint}#{path}" }
