@@ -13,6 +13,7 @@ begin
     gem.add_development_dependency "cucumber", ">= 0"
     gem.add_development_dependency "jeweler", ">= 0"
     gem.add_development_dependency "rspec", ">= 0"
+    gem.add_development_dependency "grancher", ">= 0"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
@@ -26,6 +27,23 @@ begin
 rescue LoadError
   task :features do
     abort "Cucumber is not installed"
+  end
+end
+
+begin
+  require 'grancher/task'
+  Grancher::Task.new do |g|
+    g.branch = 'gh-pages'
+    g.push_to = 'origin'
+    g.message = 'Updated website'
+
+    g.directory 'website'
+    g.directory 'rdoc', 'doc'
+    g.file 'README.rdoc'
+  end
+rescue LoadError
+  task :publish do
+    abort "Grancher is not installed"
   end
 end
 
