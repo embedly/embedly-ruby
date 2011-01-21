@@ -16,7 +16,8 @@ require 'ostruct'
 # All methods return ostructs, so fields can be accessed with the dot operator. ex.
 #
 #   api = Embedly::API.new
-#   obj = api.oembed(:url => 
+#   obj = api.oembed :url => 'http://blog.doki-pen.org/'
+#   puts obj.title, obj.description, obj.thumbnail_url
 #
 # Call parameters should be passed as the opts parameter.  If set, key will
 # automatically be added to the query string of the call, so no need to set it.
