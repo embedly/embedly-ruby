@@ -77,10 +77,15 @@ class Embedly::API
     ]
 
     path = "/#{opts[:version]}/#{opts[:action]}?#{q params}"
-    logger.debug { "calling http://#{endpoint}#{path}" }
-    http = Net::HTTP.new(endpoint)
-    request = Net::HTTP::Get.new(path)
-    response = http.request(request)
+
+    ep = endpoint
+    ep = "http://#{ep}" if endpoint !~ %r{^https?://.*}
+    logger.debug { "calling #{ep}#{path}" }
+
+    url = URI.parse(ep)
+    response = Net::HTTP.start(url.host, url.port) do |http|
+      http.get(path)
+    end
 
     # passing url vs. urls causes different things to happen on errors (like a
     # 404 for the URL).  using the url parameter returns a non 200 error code
