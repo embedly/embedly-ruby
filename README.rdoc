@@ -1,6 +1,8 @@
 = embedly
 
-Embedly ruby client library.
+Embedly ruby client library.  To find out what Embedly is all about, please
+visit http://embed.ly.  To see our api documentation, visit
+http://api.embed.ly/docs.
 
 == Installing
 
@@ -14,13 +16,44 @@ If you would like cutting edge, then you can clone and install HEAD.
   cd embedly-ruby
   rake install
 
+== Getting Started
+
+  require 'embedly'
+  require 'json'
+
+  embedly_api = Embedly::API.new
+
+  # single url
+  obj = embedly_api.oembed :url => 'http://blog.embed.ly'
+  puts obj.marshal_dump
+  json_obj = JSON.pretty_generate(obj.marshal_dump)
+  puts json_obj
+
+  # multiple urls with opts
+  objs = embedly_api.oembed(
+    :urls => ['http://blog.embed.ly', 'http://blog.doki-pen.org'],
+    :maxWidth => 450,
+    :wmode => 'transparent',
+    :method => 'after'
+  )
+  puts obj.marshal_dump
+  json_obj = JSON.pretty_generate(objs.collect{|o| o.marshal_dump})
+  puts json_obj
+
+  # call pro with key (you'll need a real key)
+  embedly_pro = Embedly::API.new :key => 'xxxxxxxxxxxxxxxxxxxxxxxxxx'
+  url = 'http://www.guardian.co.uk/media/2011/jan/21/andy-coulson-phone-hacking-statement'
+  obj = embedly_pro.preview :url => url
+  puts JSON.pretty_generate(obj.marshal_dump)
+
 == Testing
 
   gem install jeweler
   rake rspec
   rake features # if it complains of missing deps install them
 
-Some tests will fail due to missing pro key.  Set the EMBEDLY_KEY environmental variable with your key to get them to pass.
+Some tests will fail due to missing pro key.  Set the EMBEDLY_KEY environmental
+variable with your key to get them to pass.
 
   EMBEDLY_KEY=xxxxxxxxxxxxx rake features
 
@@ -43,7 +76,8 @@ Using --help with the commands should give you a good idea of how to use them.
 * Add tests for it. This is important so I don't break it in a
   future version unintentionally.
 * Commit, do not mess with rakefile, version, or history.
-  (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
+  (if you want to have your own version, that is fine but bump version in a
+   commit by itself I can ignore when I pull)
 * Send me a pull request. Bonus points for topic branches.
 
 == Copyright
