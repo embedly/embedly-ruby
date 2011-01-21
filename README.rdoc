@@ -18,7 +18,7 @@ If you would like cutting edge, then you can clone and install HEAD.
 
 == Getting Started
 
-You can find rdocs at http://embedly.github.com/embedly-ruby.
+You can find rdocs at http://rubydoc.info/github/embedly/embedly-ruby/master/frames
 
   require 'embedly'
   require 'json'
