@@ -2,7 +2,7 @@ require 'logger'
 require 'ostruct'
 
 module Embedly
-  VERSION = File.read(File.expand_path('../../VERSION', __FILE__))
+  VERSION = File.read(File.expand_path('../../VERSION', __FILE__)).strip
   Config = OpenStruct.new
 
   def self.logger(name)

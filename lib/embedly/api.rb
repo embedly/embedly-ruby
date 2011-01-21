@@ -30,12 +30,13 @@ require 'ostruct'
 #   api.new_method :arg1 => '1', :arg2 => '2'
 #
 class Embedly::API
-  attr_reader :key, :endpoint, :api_version
+  attr_reader :key, :endpoint, :api_version, :user_agent
 
   # === Options
   #
   # [:+endpoint+] Hostname of embedly server.  Defaults to api.embed.ly if no key is provided, pro.embed.ly if key is provided.
   # [:+key+] Your pro.embed.ly api key.
+  # [:+user_agent+] Your User-Agent header.  Defaults to Mozilla/5.0 (compatible; embedly-ruby/VERSION;)
   def initialize opts={}
     @key = opts[:key]
     if @key
@@ -45,6 +46,7 @@ class Embedly::API
       @endpoint = opts[:endpoint] || 'api.embed.ly'
     end
     @api_versions = Hash.new('1').merge!({'objectify' => '2'})
+    @user_agent = opts[:user_agent] || "Mozilla/5.0 (compatible; embedly-ruby/#{Embedly::VERSION};)"
   end
 
   # <b>Use methods oembed, objectify, preview in favor of this method.</b>
@@ -84,7 +86,7 @@ class Embedly::API
 
     url = URI.parse(ep)
     response = Net::HTTP.start(url.host, url.port) do |http|
-      http.get(path)
+      http.get(path, {'User-Agent' => user_agent})
     end
 
     # passing url vs. urls causes different things to happen on errors (like a
