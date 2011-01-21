@@ -2,11 +2,23 @@
 
 Embedly ruby client library.
 
+== Installing
+
+To install the official latest stable version, please use rubygems.
+
+  gem install embedly
+
+If you would like cutting edge, then you can clone and install HEAD.
+
+  git clone git@github.com:embedly/embedly-ruby.git
+  cd embedly-ruby
+  rake install
+
 == Testing
 
-* gem install jeweler
-* rake rspec
-* rake features _if it complains of missing deps install them_
+  gem install jeweler
+  rake rspec
+  rake features # if it complains of missing deps install them
 
 Some tests will fail due to missing pro key.  Set the EMBEDLY_KEY environmental variable with your key to get them to pass.
 
@@ -15,6 +27,14 @@ Some tests will fail due to missing pro key.  Set the EMBEDLY_KEY environmental 
 To turn on debugging, set the EMBEDLY_VERBOSE environmental variable.
 
   EMBEDLY_VERBOSE=1 EMBEDLY_KEY=xxxxxxxxxxx rake features
+
+We have provided some commandline tools to test the Embedly interface.
+
+  * embedly_oembed
+  * embedly_objectify
+  * embedly_preview
+
+Using --help with the commands should give you a good idea of how to use them.
 
 == Note on Patches/Pull Requests
 
