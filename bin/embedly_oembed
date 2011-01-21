@@ -9,7 +9,7 @@ options = OpenStruct.new({
   :args => {}
 })
 
-action = File.basename(__FILE__)
+action = File.basename(__FILE__)[/embedly_(\w+)/, 1]
 
 opts = OptionParser.new do |opts|
   opts.banner = <<-DOC
@@ -19,7 +19,7 @@ Usage #{action} [OPTIONS] <url> [url] ..
 
   opts.separator ""
   opts.separator "Options:"
-  
+
   opts.on("-e", "--endpoint ENDPOINT",
           "Embedly host.  If key is present, default is pro.embed.ly, else " +
           "it is api.embed.ly.") do |e|
