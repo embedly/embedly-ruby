@@ -42,7 +42,7 @@ end
 
 task :features => :check_dependencies
 
-task :default => :test
+task :default => :features
 
 require 'rake/rdoctask'
 Rake::RDocTask.new do |rdoc|
