@@ -1,6 +1,9 @@
 require 'net/http'
 require 'json'
 require 'ostruct'
+require 'embedly/model'
+
+include ::Embedly
 
 # Performs api calls to embedly.
 #
@@ -98,9 +101,9 @@ class Embedly::API
     if response.code.to_i == 200
       logger.debug { response.body }
       # [].flatten is to be sure we have an array
-      objs = [JSON.parse(response.body)].flatten.collect {|o| OpenStruct.new(o)}
+      objs = [JSON.parse(response.body)].flatten.collect {|o| EmbedlyObject.new(o)}
     else
-      objs = OpenStruct.new :type => 'error', :error_code => response.code.to_i
+      objs = EmbedlyObject.new :type => 'error', :error_code => response.code.to_i
     end
 
     if objs.size == 1

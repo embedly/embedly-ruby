@@ -17,6 +17,19 @@ Feature: OEmbed
             | http://tweetphoto.com/14784358                               | http://plixi.com        |
 
 
+    Scenario Outline: Get the types
+        Given an embedly endpoint
+        When oembed is called with the <url> URL
+        Then the type should be <type>
+
+        Examples:
+            | url                                                          | type  |
+            | http://www.scribd.com/doc/13994900/Easter                    | rich  |
+            | http://www.scribd.com/doc/28452730/Easter-Cards              | rich  |
+            | http://www.youtube.com/watch?v=Zk7dDekYej0                   | video |
+            | http://tweetphoto.com/14784358                               | photo |
+
+
     Scenario Outline: Get the provider_url with force flag
         Given an embedly endpoint
         When oembed is called with the <url> URL and force flag

@@ -36,3 +36,10 @@ Then /([^\s]+) should be ([^\s]+)/ do |key, value|
   end
 end
 
+Then /([^\s]+) should start with ([^\s]+)/ do |key, value|
+  logger = Embedly.logger('api_steps')
+  logger.debug { "result: #{@result.marshal_dump}"}
+  v = key.split('.').inject(@result){|o,c| o.send(c)}.to_s
+  v.to_s.should match(/^#{value}/)
+end
+
