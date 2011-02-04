@@ -71,46 +71,76 @@ class Embedly::API
 
     raise 'must pass urls' if opts[:urls].size == 0
 
-    if opts[:urls].size == 1
-      params = {:url => opts[:urls].first}
-    else
-      params = {:urls => opts[:urls]}
+    params = {:urls => opts[:urls]}
+
+    # store unsupported services as errors and don't send them to embedly
+    rejects = []
+    if not key
+      params[:urls].reject!.with_index do |url, i| 
+        if url !~ services_regex
+          rejects << [i, 
+            EmbedlyObject.new(
+              :type => 'error', 
+              :error_code => 401, 
+              :error_message => 'This service requires an Embedly Pro account'
+            )
+          ]
+        end
+      end
     end
 
-    params[:key] = key if key
-    params.merge!Hash[
-      opts.select{|k,_| not [:url, :urls, :action, :version].index k}
-    ]
+    if params[:urls].size > 0
+      params[:key] = key if key
+      params.merge!Hash[
+        opts.select{|k,_| not [:url, :urls, :action, :version].index k}
+      ]
 
-    path = "/#{opts[:version]}/#{opts[:action]}?#{q params}"
+      path = "/#{opts[:version]}/#{opts[:action]}?#{q params}"
 
-    ep = endpoint
-    ep = "http://#{ep}" if endpoint !~ %r{^https?://.*}
-    logger.debug { "calling #{ep}#{path}" }
+      logger.debug { "calling #{endpoint}#{path}" }
 
-    url = URI.parse(ep)
-    response = Net::HTTP.start(url.host, url.port) do |http|
-      http.get(path, {'User-Agent' => user_agent})
-    end
+      url = URI.parse(absurl(endpoint))
+      response = Net::HTTP.start(url.host, url.port) do |http|
+        http.get(path, {'User-Agent' => user_agent})
+      end
 
-    # passing url vs. urls causes different things to happen on errors (like a
-    # 404 for the URL).  using the url parameter returns a non 200 error code
-    # in the response.  Using urls causes an error json object to be returned,
-    # but the main call will still be status 200.  Below, we try to canonize as
-    # best we can but it should really be changed server side.
-    if response.code.to_i == 200
-      logger.debug { response.body }
-      # [].flatten is to be sure we have an array
-      objs = [JSON.parse(response.body)].flatten.collect {|o| EmbedlyObject.new(o)}
-    else
-      objs = EmbedlyObject.new :type => 'error', :error_code => response.code.to_i
-    end
+      if response.code.to_i == 200
+        logger.debug { response.body }
+        # [].flatten is to be sure we have an array
+        objs = [JSON.parse(response.body)].flatten.collect {|o| EmbedlyObject.new(o)}
+      else
+        logger.error { response.inspect }
+        raise 'An unexpected error occurred'
+      end
 
-    if objs.size == 1
-      objs.first
-    else
+      # re-insert rejects into response
+      rejects.each do |i, obj|
+        objs.insert i, obj
+      end
+
       objs
+    else
+      # we only have rejects, return them without calling embedly
+      rejects.collect{|i, obj| obj}
     end
+  end
+
+  def services
+    logger.warn { "services isn't availble on the pro endpoint" } if key
+    if not @services
+      url = URI.parse(absurl(endpoint))
+      response = Net::HTTP.start(url.host, url.port) do |http|
+        http.get('/1/services/ruby', {'User-Agent' => user_agent})
+      end
+      raise 'services call failed', response if response.code.to_i != 200
+      @services = JSON.parse(response.body)
+    end
+    @services
+  end
+
+  def services_regex
+    r = services.collect {|p| p["regex"].join("|")}.join("|")
+    Regexp.new r
   end
 
   # Performs api call based on method name
@@ -124,11 +154,15 @@ class Embedly::API
   def method_missing(name, *args, &block)
     opts = args[0]
     opts[:action] = name
-    opts[:version] = @api_versions[name]
+    opts[:version] = @api_version[name]
     apicall opts
   end
 
   private
+  def absurl uri
+    uri !~ %r{^https?://.*} ? "http://#{uri}" : uri
+  end
+  
   # Escapes url parameters
   # TODO: move to utils
   def escape s

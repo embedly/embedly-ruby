@@ -72,8 +72,8 @@ Feature: OEmbed
 
         Examples:
             | url                                                              |
-            | http://www.youtube.com/this/is/a/bad/url                         |
-            | http://blog.embed.ly/lsbsdlfldsf/asdfkljlas/klajsdlfkasdf        |
+            | http://www.youtube.com/watch/is/a/bad/url                        |
+            | http://www.scribd.com/doc/zfldsf/asdfkljlas/klajsdlfkasdf        |
             | http://tweetphoto.com/alsdfldsf/asdfkljlas/klajsdlfkasdf         |
         
 
@@ -85,8 +85,22 @@ Feature: OEmbed
 
         Examples:
             | urls                                                                             | errcode | types       |
-            | http://www.youtube.com/this/is/a/bad/url,http://blog.embed.ly/alsd/slsdlf/asdlfj | 404,404 | error,error |
-            | http://blog.embed.ly/lsbsdlfldsf/asdf/kl,http://tweetphoto.com/asdf/asdf/asdfl   | 404,404 | error,error |
-            | http://blog.embed.ly/lsbsdlfldsf/asdf/kl,http://tweetphoto.com/14784358          | 404,    | error,photo |
-            | http://tweetphoto.com/14784358,http://www.scribd.com/asdf/asdf/asdfasdf          | ,404    | photo,error |
+            | http://www.youtube.com/watch/a/bassd/url,http://www.youtube.com/watch/ldf/asdlfj | 404,404 | error,error |
+            | http://www.scribd.com/doc/lsbsdlfldsf/kl,http://www.scribd.com/doc/zasdf/asdfl   | 404,404 | error,error |
+            | http://www.youtube.com/watch/zzzzasdf/kl,http://tweetphoto.com/14784358          | 404,    | error,photo |
+            | http://tweetphoto.com/14784358,http://www.scribd.com/doc/asdfasdfasdf            | ,404    | photo,error |
         
+    Scenario Outline: Attempt at non-api service without key
+        Given an embedly endpoint
+        When oembed is called with the <url> URL
+        Then error_code should be 401
+        And error_message should be This service requires an Embedly Pro account
+        And type should be error
+
+        Examples:
+            | urls                                                                             | 
+            | http://hn.embed.ly/                                                              | 
+            | http://bit.ly/enZRxO                                                             | 
+            | http://techcrunch.com/2011/02/03/linkedins-next-data-dive-professional-skills/   | 
+            | http://teachertube.com/rssPhoto.php                                              | 
+            | http://goo.gl/y1i9p                                                              | 
