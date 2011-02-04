@@ -4,7 +4,7 @@ $:.unshift(File.expand_path('../../lib', __FILE__))
 
 options = OpenStruct.new({
   :endpoint => nil,
-  :key => nil,
+  :key => ENV['EMBEDLY_KEY'],
   :verbose => false,
   :args => {}
 })
@@ -26,11 +26,13 @@ Usage #{action} [OPTIONS] <url> [url] ..
     options.endpoint = e
   end
 
-  opts.on("-k", "--key KEY", "Embedly PRO key") do |k|
+  opts.on("-k", "--key KEY", "Embedly PRO key [default: " +
+                             "EMBEDLY_KEY environmental variable]") do |k|
     options.key = k
   end
 
-  opts.on("-o", "--option NAME=VALUE", "Set option to be passed as query param.") do |o|
+  opts.on("-o", "--option NAME=VALUE", "Set option to be passed as " +
+                                       "query param.") do |o|
     k,v = o.split('=')
     options.args[k] = v
   end
