@@ -4,7 +4,7 @@ $:.unshift(File.expand_path('../../lib', __FILE__))
 
 options = OpenStruct.new({
   :endpoint => nil,
-  :key => ENV['EMBEDLY_KEY'],
+  :key => ENV['EMBEDLY_KEY'] == '' ? nil : ENV['EMBEDLY_KEY'],
   :verbose => false,
   :args => {}
 })
