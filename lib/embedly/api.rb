@@ -30,7 +30,7 @@ include ::Embedly
 # api_version hash.  Here is an example.
 #
 #   api = Embedly::API.new
-#   api.api_version['new_method'] = 3
+#   api.api_version[:new_method] = 3
 #   api.new_method :arg1 => '1', :arg2 => '2'
 #
 class Embedly::API
@@ -49,7 +49,8 @@ class Embedly::API
     else
       @endpoint = opts[:endpoint] || 'api.embed.ly'
     end
-    @api_version = Hash.new('1').merge!({'objectify' => '2'})
+    @api_version = Hash.new('1').merge!({:objectify => '2'})
+    logger.debug(@api_version)
     @user_agent = opts[:user_agent] || "Mozilla/5.0 (compatible; embedly-ruby/#{Embedly::VERSION};)"
   end
 
