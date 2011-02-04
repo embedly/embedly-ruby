@@ -49,7 +49,7 @@ class Embedly::API
     else
       @endpoint = opts[:endpoint] || 'api.embed.ly'
     end
-    @api_versions = Hash.new('1').merge!({'objectify' => '2'})
+    @api_version = Hash.new('1').merge!({'objectify' => '2'})
     @user_agent = opts[:user_agent] || "Mozilla/5.0 (compatible; embedly-ruby/#{Embedly::VERSION};)"
   end
 
