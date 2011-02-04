@@ -1,0 +1,7 @@
+*embedly-0.3.0 (04 Feb 2011)
+
+	04 Feb 2011: Bob Corsaro <bob@embed.ly>
+	Services methods always return an array, even for a single URL
+
+	04 Feb 2011: Bob Corsaro <bob@embed.ly>
+	URLs are checked against the services regex for non-Pro calls
