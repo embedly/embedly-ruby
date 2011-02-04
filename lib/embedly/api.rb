@@ -20,7 +20,7 @@ include ::Embedly
 #
 #   api = Embedly::API.new
 #   obj = api.oembed :url => 'http://blog.doki-pen.org/'
-#   puts obj.title, obj.description, obj.thumbnail_url
+#   puts obj[0].title, obj[0].description, obj[0].thumbnail_url
 #
 # Call parameters should be passed as the opts parameter.  If set, key will
 # automatically be added to the query string of the call, so no need to set it.
@@ -125,6 +125,11 @@ class Embedly::API
     end
   end
 
+  # Returns structured data from the services API method.
+  #
+  # Response is cached per API object.  
+  #
+  # see http://api.embed.ly/docs/service for a description of the response.
   def services
     logger.warn { "services isn't availble on the pro endpoint" } if key
     if not @services
@@ -138,6 +143,7 @@ class Embedly::API
     @services
   end
 
+  # Returns a regex suitable for checking urls against for non-Pro usage
   def services_regex
     r = services.collect {|p| p["regex"].join("|")}.join("|")
     Regexp.new r
