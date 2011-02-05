@@ -43,14 +43,14 @@ class Embedly::API
   # [:+user_agent+] Your User-Agent header.  Defaults to Mozilla/5.0 (compatible; embedly-ruby/VERSION;)
   def initialize opts={}
     @key = opts[:key]
+    @api_version = Hash.new('1')
     if @key
       logger.debug('using pro')
       @endpoint = opts[:endpoint] || 'pro.embed.ly'
+      @api_version.merge!({:objectify => '2'})
     else
       @endpoint = opts[:endpoint] || 'api.embed.ly'
     end
-    @api_version = Hash.new('1').merge!({:objectify => '2'})
-    logger.debug(@api_version)
     @user_agent = opts[:user_agent] || "Mozilla/5.0 (compatible; embedly-ruby/#{Embedly::VERSION};)"
   end
 

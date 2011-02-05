@@ -38,6 +38,10 @@ Then /an? (\w+) error should get thrown/ do |error|
   @error.class.to_s.should == error
 end
 
+Then /objectify api_version is (\d+)$/ do |version|
+  @api.api_version[:objectify].should == version
+end
+
 Then /([^\s]+) should be (.+)$/ do |key, value|
   raise @error if @error
   logger = Embedly.logger('api_steps')
