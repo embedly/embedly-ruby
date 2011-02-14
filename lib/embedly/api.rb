@@ -44,10 +44,10 @@ class Embedly::API
   def initialize opts={}
     @key = opts[:key]
     @api_version = Hash.new('1')
+    @api_version.merge!({:objectify => '2'})
     if @key
       logger.debug('using pro')
       @endpoint = opts[:endpoint] || 'pro.embed.ly'
-      @api_version.merge!({:objectify => '2'})
     else
       @endpoint = opts[:endpoint] || 'api.embed.ly'
     end
