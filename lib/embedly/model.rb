@@ -22,7 +22,7 @@ class Embedly::EmbedlyObject < OpenStruct
   def marshal_dump
     o = @table.clone
     o.each do |k,v|
-      if v.is_a?EmbedlyObject
+      if v.is_a?Embedly::EmbedlyObject
         o[k] = v.marshal_dump
       end
     end

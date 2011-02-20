@@ -3,7 +3,6 @@ require 'json'
 require 'ostruct'
 require 'embedly/model'
 
-include ::Embedly
 
 # Performs api calls to embedly.
 #
@@ -35,6 +34,10 @@ include ::Embedly
 #
 class Embedly::API
   attr_reader :key, :endpoint, :api_version, :user_agent
+
+  def logger *args
+    Embedly.logger *args
+  end
 
   # === Options
   #
@@ -80,7 +83,7 @@ class Embedly::API
       params[:urls].reject!.with_index do |url, i| 
         if url !~ services_regex
           rejects << [i, 
-            EmbedlyObject.new(
+            Embedly::EmbedlyObject.new(
               :type => 'error', 
               :error_code => 401, 
               :error_message => 'This service requires an Embedly Pro account'
@@ -108,7 +111,9 @@ class Embedly::API
       if response.code.to_i == 200
         logger.debug { response.body }
         # [].flatten is to be sure we have an array
-        objs = [JSON.parse(response.body)].flatten.collect {|o| EmbedlyObject.new(o)}
+        objs = [JSON.parse(response.body)].flatten.collect do |o| 
+          Embedly::EmbedlyObject.new(o)
+        end
       else
         logger.error { response.inspect }
         raise 'An unexpected error occurred'
