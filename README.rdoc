@@ -16,6 +16,10 @@ If you would like cutting edge, then you can clone and install HEAD.
   cd embedly-ruby
   rake install
 
+== Requirements
+
+  * querystring <https://github/dokipen/querystring>
+
 == Getting Started
 
 You can find rdocs at http://rubydoc.info/github/embedly/embedly-ruby/master/frames
