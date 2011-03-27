@@ -2,6 +2,7 @@ require 'net/http'
 require 'json'
 require 'ostruct'
 require 'embedly/model'
+require 'querystring'
 
 include ::Embedly
 
@@ -96,7 +97,7 @@ class Embedly::API
         opts.select{|k,_| not [:url, :urls, :action, :version].index k}
       ]
 
-      path = "/#{opts[:version]}/#{opts[:action]}?#{q params}"
+      path = "/#{opts[:version]}/#{opts[:action]}?#{QueryString.stringify(params)}"
 
       logger.debug { "calling #{endpoint}#{path}" }
 
@@ -168,26 +169,6 @@ class Embedly::API
   private
   def absurl uri
     uri !~ %r{^https?://.*} ? "http://#{uri}" : uri
-  end
-  
-  # Escapes url parameters
-  # TODO: move to utils
-  def escape s
-    s.to_s.gsub(/([^ a-zA-Z0-9_.-]+)/u) do
-      '%'+$1.unpack('H2'*$1.bytesize).join('%').upcase
-    end.tr(' ', '+')
-  end
-
-  # Creates query string
-  # TODO: move to utils
-  def q params
-    params.collect do |k,v|
-      if v.is_a?Array
-        "#{k.to_s}=#{v.collect{|i|escape(i)}.join(',')}"
-      else
-        "#{k.to_s}=#{escape(v)}"
-      end
-    end.join('&')
   end
 
   def logger
