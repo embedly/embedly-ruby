@@ -74,7 +74,7 @@ Feature: OEmbed
             | url                                                              |
             | http://www.youtube.com/watch/is/a/bad/url                        |
             | http://www.scribd.com/doc/zfldsf/asdfkljlas/klajsdlfkasdf        |
-            | http://tweetphoto.com/alsdfldsf/asdfkljlas/klajsdlfkasdf         |
+            | http://fav.me/alsfsdf                                            |
         
 
     Scenario Outline: Attempt multi get 404 URLs

@@ -12,7 +12,7 @@ To install the official latest stable version, please use rubygems.
 
 If you would like cutting edge, then you can clone and install HEAD.
 
-  git clone git@github.com:embedly/embedly-ruby.git
+  git clone git://github.com/embedly/embedly-ruby.git
   cd embedly-ruby
   rake install
 
