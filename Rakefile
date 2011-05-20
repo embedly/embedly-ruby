@@ -1,48 +1,37 @@
 require 'rubygems'
+require 'bundler'
+
+begin
+  Bundler.setup(:default, :development)
+rescue Bundler::BundlerError => e
+  $stderr.puts e.message
+  $stderr.puts "Run `bundle install` to install missing gems"
+  exit e.status_code
+end
+
 require 'rake'
+require 'jeweler'
 
-begin
-  require 'jeweler'
-  Jeweler::Tasks.new do |gem|
-    gem.name = "embedly"
-    gem.summary = %Q{Ruby Embedly client library}
-    gem.description = %Q{Ruby Embedly client library}
-    gem.email = "bob@embed.ly"
-    gem.homepage = "http://github.com/embedly/embedly-ruby"
-    gem.authors = ["Bob Corsaro"]
-    gem.add_development_dependency "cucumber", ">= 0"
-    gem.add_development_dependency "jeweler", ">= 0"
-    gem.add_development_dependency "rspec", ">= 0"
-  end
-  Jeweler::GemcutterTasks.new
+Jeweler::Tasks.new do |gem|
+  gem.name = "embedly"
+  gem.summary = %Q{Ruby Embedly client library}
+  gem.description = %Q{Ruby Embedly client library}
+  gem.email = "bob@embed.ly"
+  gem.homepage = "http://github.com/embedly/embedly-ruby"
+  gem.authors = ["Bob Corsaro"]
+  gem.license = "MIT"
 
-rescue LoadError
-  puts "Jeweler (or a dependency) not available. Install it with: gem install jeweler"
+  # in Gemfile
 end
+Jeweler::GemcutterTasks.new
 
-begin
-  require 'cucumber/rake/task'
-  Cucumber::Rake::Task.new(:features)
-rescue LoadError
-  task :features do
-    abort "Cucumber is not installed"
-  end
+require 'cucumber/rake/task'
+Cucumber::Rake::Task.new(:features)
+
+require 'yard'
+YARD::Rake::YardocTask.new do |t|
+    t.files = FileList['lib/**/*.rb'].exclude('lib/jeweler/templates/**/*.rb')
 end
-
-begin
-  require 'yard'
-  YARD::Rake::YardocTask.new do |t|
-      t.files = FileList['lib/**/*.rb'].exclude('lib/jeweler/templates/**/*.rb')
-  end
-rescue LoadError
-  task :yard do
-    abort "Yard is not installed"
-  end
-end
-
-task :features => :check_dependencies
-
-task :default => :features
 
 require 'rake/rdoctask'
 Rake::RDocTask.new do |rdoc|
@@ -53,3 +42,5 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
+
+task :default => :features
