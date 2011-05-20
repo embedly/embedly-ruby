@@ -65,5 +65,5 @@ Embedly::Config.logging = true if options.verbose
 
 options.args[:urls] = ARGV
 api = Embedly::API.new options.marshal_dump
-objs = [api.send(action, options.args)].flatten.collect{|o| o.marshal_dump}
+objs = [api.send(action.to_sym, options.args)].flatten.collect{|o| o.marshal_dump}
 puts JSON.pretty_generate(objs)
