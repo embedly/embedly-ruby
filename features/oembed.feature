@@ -14,7 +14,7 @@ Feature: OEmbed
             | http://www.scribd.com/doc/13994900/Easter                    | http://www.scribd.com/  |
             | http://www.scribd.com/doc/28452730/Easter-Cards              | http://www.scribd.com/  |
             | http://www.youtube.com/watch?v=Zk7dDekYej0                   | http://www.youtube.com/ |
-            | http://tweetphoto.com/14784358                               | http://plixi.com        |
+            | http://yfrog.com/h7qqespj                                    | http://yfrog.com        |
 
 
     Scenario Outline: Get the types
@@ -27,7 +27,7 @@ Feature: OEmbed
             | http://www.scribd.com/doc/13994900/Easter                    | rich  |
             | http://www.scribd.com/doc/28452730/Easter-Cards              | rich  |
             | http://www.youtube.com/watch?v=Zk7dDekYej0                   | video |
-            | http://tweetphoto.com/14784358                               | photo |
+            | http://yfrog.com/h7qqespj                                    | photo |
 
 
     Scenario Outline: Get the provider_url with force flag
@@ -48,7 +48,7 @@ Feature: OEmbed
         Examples:
             | urls                                                                                      | provider_urls                                 |
             | http://www.scribd.com/doc/13994900/Easter,http://www.scribd.com/doc/28452730/Easter-Cards | http://www.scribd.com/,http://www.scribd.com/ |
-            | http://www.youtube.com/watch?v=Zk7dDekYej0,http://plixi.com/p/16044847                    | http://www.youtube.com/,http://plixi.com      |
+            | http://www.youtube.com/watch?v=Zk7dDekYej0,http://yfrog.com/h7qqespj                      | http://www.youtube.com/,http://yfrog.com      |
 
 
     Scenario Outline: Get the provider_url with pro
@@ -87,8 +87,8 @@ Feature: OEmbed
             | urls                                                                             | errcode | types       |
             | http://www.youtube.com/watch/a/bassd/url,http://www.youtube.com/watch/ldf/asdlfj | 404,404 | error,error |
             | http://www.scribd.com/doc/lsbsdlfldsf/kl,http://www.scribd.com/doc/zasdf/asdfl   | 404,404 | error,error |
-            | http://www.youtube.com/watch/zzzzasdf/kl,http://tweetphoto.com/14784358          | 404,    | error,photo |
-            | http://tweetphoto.com/14784358,http://www.scribd.com/doc/asdfasdfasdf            | ,404    | photo,error |
+            | http://www.youtube.com/watch/zzzzasdf/kl,http://yfrog.com/h7qqespj               | 404,    | error,photo |
+            | http://yfrog.com/h7qqespj,http://www.scribd.com/doc/asdfasdfasdf                 | ,404    | photo,error |
         
     Scenario Outline: Attempt at non-api service without key
         Given an embedly endpoint

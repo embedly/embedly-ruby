@@ -11,5 +11,5 @@ Feature: Objectify
         And objectify api_version is 2
 
         Examples:
-            | url                            | metadesc                 |
-            | http://tweetphoto.com/14784358 | Plixi allows user to ins |
+            | url                            | metadesc                |
+            | http://tweetphoto.com/14784358 | Earn PTZ when you watch |
