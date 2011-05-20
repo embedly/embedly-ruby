@@ -105,8 +105,8 @@ class Embedly::API
 
       logger.debug { "calling #{endpoint}#{path}" }
 
-      url = URI.parse(absurl(endpoint))
-      response = Net::HTTP.start(url.host, url.port) do |http|
+      host, port = uri_parse(endpoint)
+      response = Net::HTTP.start(host, port) do |http|
         http.get(path, {'User-Agent' => user_agent})
       end
 
@@ -135,14 +135,14 @@ class Embedly::API
 
   # Returns structured data from the services API method.
   #
-  # Response is cached per API object.  
+  # Response is cached per API object.
   #
   # see http://api.embed.ly/docs/service for a description of the response.
   def services
     logger.warn { "services isn't availble on the pro endpoint" } if key
     if not @services
-      url = URI.parse(absurl(endpoint))
-      response = Net::HTTP.start(url.host, url.port) do |http|
+      host, port = uri_parse(endpoint)
+      response = Net::HTTP.start(host, port) do |http|
         http.get('/1/services/ruby', {'User-Agent' => user_agent})
       end
       raise 'services call failed', response if response.code.to_i != 200
@@ -177,8 +177,11 @@ class Embedly::API
   end
 
   private
-  def absurl uri
-    uri !~ %r{^https?://.*} ? "http://#{uri}" : uri
+  def uri_parse uri
+    uri =~ %r{^(http(s?)://)?([^:/]+)(:([\d]+))?(/.*)?$}
+    host = $3
+    port = $5 ? $5 : ( $2 ? 443 : 80)
+    [host, port.to_i]
   end
 
   def logger
