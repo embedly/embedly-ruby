@@ -46,6 +46,7 @@ class Embedly::API
   # [:+key+] Your pro.embed.ly api key.
   # [:+user_agent+] Your User-Agent header.  Defaults to Mozilla/5.0 (compatible; embedly-ruby/VERSION;)
   def initialize opts={}
+    @endpoints = [:oembed, :objectify, :preview]
     @key = opts[:key]
     @api_version = Hash.new('1')
     @api_version.merge!({:objectify => '2'})
@@ -165,10 +166,14 @@ class Embedly::API
   # - +preview+ _pro-only_
   #
   def method_missing(name, *args, &block)
-    opts = args[0]
-    opts[:action] = name
-    opts[:version] = @api_version[name]
-    apicall opts
+    if @endpoints.include?name
+      opts = args[0]
+      opts[:action] = name
+      opts[:version] = @api_version[name]
+      apicall opts
+    else
+      super
+    end
   end
 
   private
