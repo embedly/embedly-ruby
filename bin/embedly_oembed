@@ -3,7 +3,7 @@ $:.unshift(File.expand_path('../../lib', __FILE__))
 %w{embedly json optparse ostruct}.each {|l| require l}
 
 options = OpenStruct.new({
-  :endpoint => nil,
+  :hostname => nil,
   :key => ENV['EMBEDLY_KEY'] == '' ? nil : ENV['EMBEDLY_KEY'],
   :verbose => false,
   :args => {}
@@ -20,13 +20,12 @@ Usage #{action} [OPTIONS] <url> [url] ..
   opts.separator ""
   opts.separator "Options:"
 
-  opts.on("-e", "--endpoint ENDPOINT",
-          "Embedly host.  If key is present, default is pro.embed.ly, else " +
-          "it is api.embed.ly.") do |e|
-    options.endpoint = e
+  opts.on("-H", "--hostname ENDPOINT",
+          "Embedly host.  Default is api.embed.ly.") do |e|
+    options.hostname = e
   end
 
-  opts.on("-k", "--key KEY", "Embedly PRO key [default: " +
+  opts.on("-k", "--key KEY", "Embedly key [default: " +
                              "EMBEDLY_KEY environmental variable]") do |k|
     options.key = k
   end
