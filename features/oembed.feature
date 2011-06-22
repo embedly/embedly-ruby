@@ -5,7 +5,7 @@ Feature: OEmbed
     Because I want and oembed for a specific url
 
     Scenario Outline: Get the provider_url
-        Given an embedly endpoint
+        Given an embedly api
         When oembed is called with the <url> URL
         Then the provider_url should be <provider_url>
 
@@ -18,7 +18,7 @@ Feature: OEmbed
 
 
     Scenario Outline: Get the types
-        Given an embedly endpoint
+        Given an embedly api
         When oembed is called with the <url> URL
         Then the type should be <type>
 
@@ -31,7 +31,7 @@ Feature: OEmbed
 
 
     Scenario Outline: Get the provider_url with force flag
-        Given an embedly endpoint
+        Given an embedly api
         When oembed is called with the <url> URL and force flag
         Then the provider_url should be <provider_url>
 
@@ -41,7 +41,7 @@ Feature: OEmbed
 
 
     Scenario Outline: Get multiple provider_urls
-        Given an embedly endpoint
+        Given an embedly api
         When oembed is called with the <urls> URLs
         Then provider_url should be <provider_urls>
 
@@ -52,7 +52,7 @@ Feature: OEmbed
 
 
     Scenario Outline: Get the provider_url with pro
-        Given an embedly endpoint with key
+        Given an embedly api with key
         When oembed is called with the <url> URL
         Then the provider_url should be <provider_url>
 
@@ -64,7 +64,7 @@ Feature: OEmbed
 
 
     Scenario Outline: Attempt to get 404 URL
-        Given an embedly endpoint
+        Given an embedly api
         When oembed is called with the <url> URL
         Then type should be error
         And error_code should be 404
@@ -78,7 +78,7 @@ Feature: OEmbed
         
 
     Scenario Outline: Attempt multi get 404 URLs
-        Given an embedly endpoint
+        Given an embedly api
         When oembed is called with the <urls> URLs
         Then error_code should be <errcode>
         And type should be <types>
@@ -91,7 +91,7 @@ Feature: OEmbed
             | http://yfrog.com/h7qqespj,http://www.scribd.com/doc/asdfasdfasdf                 | ,404    | photo,error |
         
     Scenario Outline: Attempt at non-api service without key
-        Given an embedly endpoint
+        Given an embedly api
         When oembed is called with the <url> URL
         Then error_code should be 401
         And error_message should be This service requires an Embedly Pro account

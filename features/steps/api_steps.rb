@@ -1,20 +1,19 @@
 $:.unshift(File.expand_path('../../../lib',__FILE__))
 require 'embedly'
 
-# cache for endpoints
-ENDPOINTS = {}
+# cache for hostnames
+HOSTNAMES = {}
 
-Given /an embedly endpoint( [^\s]+)?( with key)?$/ do |endpoint, key_enabled|
+Given /an embedly api( with key)?$/ do |key_enabled|
   opts = {}
-  opts[:endpoint] = endpoint
   if key_enabled
     raise 'Please set env variable $EMBEDLY_KEY' unless ENV['EMBEDLY_KEY']
     opts[:key] = ENV["EMBEDLY_KEY"] 
   end
-  if not ENDPOINTS[opts]
-    ENDPOINTS[opts] = Embedly::API.new opts
+  if not HOSTNAMES[opts]
+    HOSTNAMES[opts] = Embedly::API.new opts
   end
-  @api = ENDPOINTS[opts]
+  @api = HOSTNAMES[opts]
 end
 
 When /(\w+) is called with the (.*) URLs?( and ([^\s]+) flag)?$/ do |method, urls, _, flag|

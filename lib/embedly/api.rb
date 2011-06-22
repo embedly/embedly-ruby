@@ -34,7 +34,7 @@ require 'querystring'
 #   api.new_method :arg1 => '1', :arg2 => '2'
 #
 class Embedly::API
-  attr_reader :key, :endpoint, :api_version, :user_agent
+  attr_reader :key, :hostname, :api_version, :user_agent
 
   def logger *args
     Embedly.logger *args
@@ -42,7 +42,7 @@ class Embedly::API
 
   # === Options
   #
-  # [:+endpoint+] Hostname of embedly server.  Defaults to api.embed.ly if no key is provided, pro.embed.ly if key is provided.
+  # [:+hostname+] Hostname of embedly server.  Defaults to api.embed.ly if no key is provided, pro.embed.ly if key is provided.
   # [:+key+] Your pro.embed.ly api key.
   # [:+user_agent+] Your User-Agent header.  Defaults to Mozilla/5.0 (compatible; embedly-ruby/VERSION;)
   def initialize opts={}
@@ -50,13 +50,9 @@ class Embedly::API
     @key = opts[:key]
     @api_version = Hash.new('1')
     @api_version.merge!({:objectify => '2'})
-    if @key
-      logger.debug('using pro')
-      @endpoint = opts[:endpoint] || 'pro.embed.ly'
-    else
-      @endpoint = opts[:endpoint] || 'api.embed.ly'
-    end
+    @hostname = opts[:hostname] || 'api.embed.ly'
     @user_agent = opts[:user_agent] || "Mozilla/5.0 (compatible; embedly-ruby/#{Embedly::VERSION};)"
+    @referrer = opts[:referrer]
   end
 
   # <b>Use methods oembed, objectify, preview in favor of this method.</b>
@@ -103,9 +99,9 @@ class Embedly::API
 
       path = "/#{opts[:version]}/#{opts[:action]}?#{QueryString.stringify(params)}"
 
-      logger.debug { "calling #{endpoint}#{path}" }
+      logger.debug { "calling #{hostname}#{path}" }
 
-      host, port = uri_parse(endpoint)
+      host, port = uri_parse(hostname)
       response = Net::HTTP.start(host, port) do |http|
         http.get(path, {'User-Agent' => user_agent})
       end
@@ -139,9 +135,8 @@ class Embedly::API
   #
   # see http://api.embed.ly/docs/service for a description of the response.
   def services
-    logger.warn { "services isn't availble on the pro endpoint" } if key
     if not @services
-      host, port = uri_parse(endpoint)
+      host, port = uri_parse(hostname)
       response = Net::HTTP.start(host, port) do |http|
         http.get('/1/services/ruby', {'User-Agent' => user_agent})
       end
