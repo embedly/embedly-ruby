@@ -37,6 +37,10 @@ Usage #{action} [OPTIONS] <url> [url] ..
     options.key = k
   end
 
+  opts.on("-N", "--no-key", "Ignore EMBEDLY_KEY environmental variable") do
+    options.key = nil
+  end
+
   opts.on("-o", "--option NAME=VALUE", "Set option to be passed as " +
                                        "query param.") do |o|
     k,v = o.split('=')
