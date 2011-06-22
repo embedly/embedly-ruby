@@ -6,7 +6,8 @@ options = OpenStruct.new({
   :hostname => nil,
   :key => ENV['EMBEDLY_KEY'] == '' ? nil : ENV['EMBEDLY_KEY'],
   :verbose => false,
-  :args => {}
+  :args => {},
+  :headers => {}
 })
 
 action = File.basename(__FILE__)[/embedly_(\w+)/, 1]
@@ -23,6 +24,12 @@ Usage #{action} [OPTIONS] <url> [url] ..
   opts.on("-H", "--hostname ENDPOINT",
           "Embedly host.  Default is api.embed.ly.") do |e|
     options.hostname = e
+  end
+
+  opts.on("--header NAME=VALUE",
+          "HTTP header to send with requests.") do |header|
+    n,v = header.split '='
+    options.headers[n] = v
   end
 
   opts.on("-k", "--key KEY", "Embedly key [default: " +
