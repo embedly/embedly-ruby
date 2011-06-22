@@ -94,7 +94,7 @@ Feature: OEmbed
         Given an embedly api
         When oembed is called with the <url> URL
         Then error_code should be 401
-        And error_message should be This service requires an Embedly Pro account
+        And error_message should be Embedly api key is required.
         And type should be error
 
         Examples:
