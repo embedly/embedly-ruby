@@ -2,6 +2,7 @@ require 'net/http'
 require 'json'
 require 'ostruct'
 require 'embedly/model'
+require 'embedly/exceptions'
 require 'querystring'
 
 
@@ -107,7 +108,7 @@ class Embedly::API
 
       host, port = uri_parse(endpoint)
       response = Net::HTTP.start(host, port) do |http|
-        http.get(path, {'User-Agent' => user_agent})
+        http.get(path, {'User-Agent' => user_agent, 'Referer' => 'Your mom', 'X-Real-IP' => '204.9.220.42'})
       end
 
       if response.code.to_i == 200
@@ -117,8 +118,8 @@ class Embedly::API
           Embedly::EmbedlyObject.new(o)
         end
       else
-        logger.error { response.inspect }
-        raise 'An unexpected error occurred'
+        logger.debug { response }
+        raise Embedly::BadResponseException.new response
       end
 
       # re-insert rejects into response

@@ -65,5 +65,11 @@ Embedly::Config.logging = true if options.verbose
 
 options.args[:urls] = ARGV
 api = Embedly::API.new options.marshal_dump
-objs = [api.send(action.to_sym, options.args)].flatten.collect{|o| o.marshal_dump}
-puts JSON.pretty_generate(objs)
+begin
+  objs = [api.send(action.to_sym, options.args)].flatten.collect{|o| o.marshal_dump}
+  puts JSON.pretty_generate(objs)
+rescue Embedly::BadResponseException => e
+  puts "#{e.response.code} :: #{e.response.message}"
+end
+
+
