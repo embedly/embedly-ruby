@@ -15,7 +15,7 @@ require 'querystring'
 #
 # * +oembed+
 # * +objectify+
-# * +preview+ _pro-only_
+# * +preview+
 #
 # All methods return ostructs, so fields can be accessed with the dot operator. ex.
 #
@@ -35,7 +35,7 @@ require 'querystring'
 #   api.new_method :arg1 => '1', :arg2 => '2'
 #
 class Embedly::API
-  attr_reader :key, :endpoint, :api_version, :user_agent
+  attr_reader :key, :hostname, :api_version, :headers
 
   def logger *args
     Embedly.logger *args
@@ -43,21 +43,18 @@ class Embedly::API
 
   # === Options
   #
-  # [:+endpoint+] Hostname of embedly server.  Defaults to api.embed.ly if no key is provided, pro.embed.ly if key is provided.
-  # [:+key+] Your pro.embed.ly api key.
+  # [:+hostname+] Hostname of embedly server.  Defaults to api.embed.ly.
+  # [:+key+] Your api.embed.ly key.
   # [:+user_agent+] Your User-Agent header.  Defaults to Mozilla/5.0 (compatible; embedly-ruby/VERSION;)
+  # [:+headers+] Additional headers to send with requests.
   def initialize opts={}
     @endpoints = [:oembed, :objectify, :preview]
     @key = opts[:key]
     @api_version = Hash.new('1')
     @api_version.merge!({:objectify => '2'})
-    if @key
-      logger.debug('using pro')
-      @endpoint = opts[:endpoint] || 'pro.embed.ly'
-    else
-      @endpoint = opts[:endpoint] || 'api.embed.ly'
-    end
-    @user_agent = opts[:user_agent] || "Mozilla/5.0 (compatible; embedly-ruby/#{Embedly::VERSION};)"
+    @hostname = opts[:hostname] || 'api.embed.ly'
+    @headers = opts[:headers] || {}
+    @headers['User-Agent'] = opts[:user_agent] || "Mozilla/5.0 (compatible; embedly-ruby/#{Embedly::VERSION};)"
   end
 
   # <b>Use methods oembed, objectify, preview in favor of this method.</b>
@@ -83,13 +80,13 @@ class Embedly::API
     # store unsupported services as errors and don't send them to embedly
     rejects = []
     if not key
-      params[:urls].reject!.with_index do |url, i| 
+      params[:urls].reject!.with_index do |url, i|
         if url !~ services_regex
-          rejects << [i, 
+          rejects << [i,
             Embedly::EmbedlyObject.new(
-              :type => 'error', 
-              :error_code => 401, 
-              :error_message => 'This service requires an Embedly Pro account'
+              :type => 'error',
+              :error_code => 401,
+              :error_message => 'Embedly api key is required.'
             )
           ]
         end
@@ -104,11 +101,11 @@ class Embedly::API
 
       path = "/#{opts[:version]}/#{opts[:action]}?#{QueryString.stringify(params)}"
 
-      logger.debug { "calling #{endpoint}#{path}" }
+      logger.debug { "calling #{hostname}#{path} with headers #{headers}" }
 
-      host, port = uri_parse(endpoint)
+      host, port = uri_parse(hostname)
       response = Net::HTTP.start(host, port) do |http|
-        http.get(path, {'User-Agent' => user_agent, 'Referer' => 'Your mom', 'X-Real-IP' => '204.9.220.42'})
+        http.get(path, headers)
       end
 
       if response.code.to_i == 200
@@ -140,11 +137,10 @@ class Embedly::API
   #
   # see http://api.embed.ly/docs/service for a description of the response.
   def services
-    logger.warn { "services isn't availble on the pro endpoint" } if key
     if not @services
-      host, port = uri_parse(endpoint)
+      host, port = uri_parse(hostname)
       response = Net::HTTP.start(host, port) do |http|
-        http.get('/1/services/ruby', {'User-Agent' => user_agent})
+        http.get('/1/services/ruby', headers)
       end
       raise 'services call failed', response if response.code.to_i != 200
       @services = JSON.parse(response.body)
@@ -152,7 +148,7 @@ class Embedly::API
     @services
   end
 
-  # Returns a regex suitable for checking urls against for non-Pro usage
+  # Returns a regex suitable for checking urls against for non-key usage
   def services_regex
     r = services.collect {|p| p["regex"].join("|")}.join("|")
     Regexp.new r
@@ -164,7 +160,7 @@ class Embedly::API
   #
   # - +oembed+
   # - +objectify+
-  # - +preview+ _pro-only_
+  # - +preview+
   #
   def method_missing(name, *args, &block)
     if @endpoints.include?name
