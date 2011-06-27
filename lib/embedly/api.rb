@@ -57,11 +57,14 @@ class Embedly::API
     @api_version = Hash.new('1')
     @api_version.merge!({:objectify => '2'})
     @hostname = opts[:hostname] || 'api.embed.ly'
-    @headers = {'User-Agent' => opts[:user_agent] || "Mozilla/5.0 (compatible; embedly-ruby/#{Embedly::VERSION};)"}.merge(opts[:headers])
+    @headers = {
+      'User-Agent' => opts[:user_agent] || "Mozilla/5.0 (compatible; embedly-ruby/#{Embedly::VERSION};)"
+    }.merge(opts[:headers]||{})
   end
 
   def _do_basic_call path
     scheme, host, port = uri_parse hostname
+    logger.debug { "calling #{site}#{path} with headers #{headers}" }
     Net::HTTP.start(host, port, :use_ssl => scheme == 'https') do |http|
       http.get(path, headers)
     end
@@ -72,9 +75,11 @@ class Embedly::API
       :site => site, 
       :http_method => :get,
       :scheme => :query_string)
-    
+    # our implementation is broken for header authorization, thus the 
+    # query_string
 
     access_token = OAuth::AccessToken.new consumer
+    logger.debug { "calling #{site}#{path} with headers #{headers} via OAuth" }
     access_token.get path, headers
   end
 
@@ -129,8 +134,6 @@ class Embedly::API
       ]
 
       path = "/#{opts[:version]}/#{opts[:action]}?#{QueryString.stringify(params)}"
-
-      logger.debug { "calling #{hostname}#{path} with headers #{headers}" }
 
       response = _do_call path
 
