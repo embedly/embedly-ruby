@@ -1,6 +1,7 @@
 source :rubygems
 
 gem "querystring"
+gem "oauth"
 
 group :development do
   gem "jeweler"

@@ -1,9 +1,11 @@
 require 'net/http'
+require 'net/https'
 require 'json'
 require 'ostruct'
 require 'embedly/model'
 require 'embedly/exceptions'
 require 'querystring'
+require 'oauth'
 
 
 # Performs api calls to embedly.
@@ -35,7 +37,7 @@ require 'querystring'
 #   api.new_method :arg1 => '1', :arg2 => '2'
 #
 class Embedly::API
-  attr_reader :key, :hostname, :api_version, :headers
+  attr_reader :key, :hostname, :api_version, :headers, :secret
 
   def logger *args
     Embedly.logger *args
@@ -45,16 +47,43 @@ class Embedly::API
   #
   # [:+hostname+] Hostname of embedly server.  Defaults to api.embed.ly.
   # [:+key+] Your api.embed.ly key.
+  # [:+secret+] Your api.embed.ly secret if you are using oauth.
   # [:+user_agent+] Your User-Agent header.  Defaults to Mozilla/5.0 (compatible; embedly-ruby/VERSION;)
   # [:+headers+] Additional headers to send with requests.
   def initialize opts={}
     @endpoints = [:oembed, :objectify, :preview]
     @key = opts[:key]
+    @secret = opts[:secret]
     @api_version = Hash.new('1')
     @api_version.merge!({:objectify => '2'})
     @hostname = opts[:hostname] || 'api.embed.ly'
-    @headers = opts[:headers] || {}
-    @headers['User-Agent'] = opts[:user_agent] || "Mozilla/5.0 (compatible; embedly-ruby/#{Embedly::VERSION};)"
+    @headers = {'User-Agent' => opts[:user_agent] || "Mozilla/5.0 (compatible; embedly-ruby/#{Embedly::VERSION};)"}.merge(opts[:headers])
+  end
+
+  def _do_basic_call path
+    scheme, host, port = uri_parse hostname
+    Net::HTTP.start(host, port, :use_ssl => scheme == 'https') do |http|
+      http.get(path, headers)
+    end
+  end
+
+  def _do_oauth_call path
+    consumer = OAuth::Consumer.new(key, secret,
+      :site => site, 
+      :http_method => :get,
+      :scheme => :query_string)
+    
+
+    access_token = OAuth::AccessToken.new consumer
+    access_token.get path, headers
+  end
+
+  def _do_call path
+    if key and secret
+      _do_oauth_call path
+    else
+      _do_basic_call path
+    end
   end
 
   # <b>Use methods oembed, objectify, preview in favor of this method.</b>
@@ -94,7 +123,7 @@ class Embedly::API
     end
 
     if params[:urls].size > 0
-      params[:key] = key if key
+      params[:key] = key if key and not secret
       params.merge!Hash[
         opts.select{|k,_| not [:url, :urls, :action, :version].index k}
       ]
@@ -103,10 +132,7 @@ class Embedly::API
 
       logger.debug { "calling #{hostname}#{path} with headers #{headers}" }
 
-      host, port = uri_parse(hostname)
-      response = Net::HTTP.start(host, port) do |http|
-        http.get(path, headers)
-      end
+      response = _do_call path
 
       if response.code.to_i == 200
         logger.debug { response.body }
@@ -138,10 +164,7 @@ class Embedly::API
   # see http://api.embed.ly/docs/service for a description of the response.
   def services
     if not @services
-      host, port = uri_parse(hostname)
-      response = Net::HTTP.start(host, port) do |http|
-        http.get('/1/services/ruby', headers)
-      end
+      response = _do_call '/1/services/ruby'
       raise 'services call failed', response if response.code.to_i != 200
       @services = JSON.parse(response.body)
     end
@@ -175,10 +198,20 @@ class Embedly::API
 
   private
   def uri_parse uri
-    uri =~ %r{^(http(s?)://)?([^:/]+)(:([\d]+))?(/.*)?$}
-    host = $3
-    port = $5 ? $5 : ( $2 ? 443 : 80)
-    [host, port.to_i]
+    uri =~ %r{^((http(s?))://)?([^:/]+)(:([\d]+))?(/.*)?$}
+    scheme = $2 || 'http'
+    host = $4
+    port = $6 ? $6 : ( scheme == 'https' ? 443 : 80)
+    [scheme, host, port.to_i]
+  end
+
+  def site
+    scheme, host, port = uri_parse hostname
+    if (scheme == 'http' and port == 80) or (scheme == 'https' and port == 443)
+      "#{scheme}://#{host}"
+    else
+      "#{scheme}://#{host}:#{port}"
+    end
   end
 
   def logger

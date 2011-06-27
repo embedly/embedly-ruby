@@ -5,6 +5,7 @@ $:.unshift(File.expand_path('../../lib', __FILE__))
 options = OpenStruct.new({
   :hostname => nil,
   :key => ENV['EMBEDLY_KEY'] == '' ? nil : ENV['EMBEDLY_KEY'],
+  :secret => ENV['EMBEDLY_SECRET'] == '' ? nil : ENV['EMBEDLY_SECRET'],
   :verbose => false,
   :args => {},
   :headers => {}
@@ -37,8 +38,17 @@ Usage #{action} [OPTIONS] <url> [url] ..
     options.key = k
   end
 
+  opts.on("-s", "--secret SECRET", "Embedly secret [default: " +
+                             "EMBEDLY_SECRET environmental variable]") do |s|
+    options.secret = s
+  end
+
   opts.on("-N", "--no-key", "Ignore EMBEDLY_KEY environmental variable") do
     options.key = nil
+  end
+
+  opts.on("--no-secret", "Ignore EMBEDLY_SECRET environmental variable") do
+    options.secret = nil
   end
 
   opts.on("-o", "--option NAME=VALUE", "Set option to be passed as " +
