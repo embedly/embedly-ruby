@@ -9,6 +9,7 @@ Given /an embedly api( with key)?$/ do |key_enabled|
   if key_enabled
     raise 'Please set env variable $EMBEDLY_KEY' unless ENV['EMBEDLY_KEY']
     opts[:key] = ENV["EMBEDLY_KEY"] 
+    opts[:secret] = ENV["EMBEDLY_SECRET"] 
   end
   if not HOSTNAMES[opts]
     HOSTNAMES[opts] = Embedly::API.new opts
