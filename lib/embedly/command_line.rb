@@ -16,7 +16,7 @@ module Embedly
         reject_nil!
         options
       rescue OptionParser::InvalidOption => error
-        puts "#{error.message}"
+        puts "ERROR: #{error.message}"
         puts parser.on_tail
         exit
       end
@@ -41,8 +41,8 @@ module Embedly
       end
 
       def set_urls!
-        urls = @args.last
-        options[:query][:urls] = urls.is_a?(Array) ? urls : [urls]
+        raise(OptionParser::InvalidOption, "url required") if @args.empty?
+        options[:query][:urls] = @args
       end
 
       def parser

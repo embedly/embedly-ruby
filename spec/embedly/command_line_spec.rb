@@ -17,15 +17,18 @@ module Embedly
         api.should_receive(:oembed).with(:urls => ['http://yfrog.com/h7qqespj'], :maxwidth => '10')
         CommandLine.run!(:oembed, arguments)
       end
+
+      it "raises an error if the arguments are empty" do
+        $stdout = StringIO.new
+        expect {
+          CommandLine.run!(:oembed, [])
+        }.to raise_error(SystemExit)
+      end
     end
 
     describe "#run" do
       before do
         API.any_instance.stub(:oembed)
-      end
-
-      describe "with no arguments" do
-        it "shows the help"
       end
 
       describe "with option --hostname" do
@@ -106,6 +109,7 @@ module Embedly
     end
 
     def command(arguments)
+      arguments << 'testurl.com'
       command = CommandLine.new(arguments)
       command.run
       command.options
