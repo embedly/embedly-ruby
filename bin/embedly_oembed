@@ -1,95 +1,12 @@
 #!/usr/bin/env ruby
 $:.unshift(File.expand_path('../../lib', __FILE__))
-%w{embedly json optparse ostruct}.each {|l| require l}
+%w{embedly embedly/command_line json optparse ostruct}.each {|l| require l}
 
-options = OpenStruct.new({
-  :hostname => nil,
-  :key => ENV['EMBEDLY_KEY'] == '' ? nil : ENV['EMBEDLY_KEY'],
-  :secret => ENV['EMBEDLY_SECRET'] == '' ? nil : ENV['EMBEDLY_SECRET'],
-  :verbose => false,
-  :args => {},
-  :headers => {}
-})
+api = Embedly::CommandLine.run!(:oembed, ARGV)
 
-action = File.basename(__FILE__)[/embedly_(\w+)/, 1]
-
-opts = OptionParser.new do |opts|
-  opts.banner = <<-DOC
-Fetch JSON from the embedly #{action} service.
-Usage #{action} [OPTIONS] <url> [url] ..
-  DOC
-
-  opts.separator ""
-  opts.separator "Options:"
-
-  opts.on("-H", "--hostname ENDPOINT",
-          "Embedly host.  Default is api.embed.ly.") do |e|
-    options.hostname = e
-  end
-
-  opts.on("--header NAME=VALUE",
-          "HTTP header to send with requests.") do |header|
-    n,v = header.split '='
-    options.headers[n] = v
-  end
-
-  opts.on("-k", "--key KEY", "Embedly key [default: " +
-                             "EMBEDLY_KEY environmental variable]") do |k|
-    options.key = k
-  end
-
-  opts.on("-s", "--secret SECRET", "Embedly secret [default: " +
-                             "EMBEDLY_SECRET environmental variable]") do |s|
-    options.secret = s
-  end
-
-  opts.on("-N", "--no-key", "Ignore EMBEDLY_KEY environmental variable") do
-    options.key = nil
-  end
-
-  opts.on("--no-secret", "Ignore EMBEDLY_SECRET environmental variable") do
-    options.secret = nil
-  end
-
-  opts.on("-o", "--option NAME=VALUE", "Set option to be passed as " +
-                                       "query param.") do |o|
-    k,v = o.split('=')
-    options.args[k] = v
-  end
-
-  opts.separator ""
-  opts.separator "Common Options:"
-
-  opts.on("-v", "--verbose", "Run verbosely") do
-    options.verbose = true
-  end
-
-  opts.on("-h", "--help", "Display this message") do
-    puts opts
-    exit
-  end
-
-  opts.separator ""
-  opts.separator "Bob Corsaro <bob@embed.ly>"
-end
-
-opts.parse!
-
-if ARGV.size < 1
-  $stderr.puts "ERROR: url required"
-  $stderr.puts opts
-  exit 1
-end
-
-Embedly::Config.logging = true if options.verbose
-
-options.args[:urls] = ARGV
-api = Embedly::API.new options.marshal_dump
 begin
-  objs = [api.send(action.to_sym, options.args)].flatten.collect{|o| o.marshal_dump}
-  puts JSON.pretty_generate(objs)
+  data = api.flatten.collect { |o| o.marshal_dump }
+  puts JSON.pretty_generate(data)
 rescue Embedly::BadResponseException => e
   puts "#{e.response.code} :: #{e.response.message}"
 end
-
-
