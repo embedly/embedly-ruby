@@ -53,7 +53,7 @@ class Embedly::API
   def initialize opts={}
     @endpoints = [:oembed, :objectify, :preview]
     @key = opts[:key]
-    @secret = opts[:secret]
+    @secret = opts[:secret] == "" ? nil : opts[:secret]
     @api_version = Hash.new('1')
     @api_version.merge!({:objectify => '2'})
     @hostname = opts[:hostname] || 'api.embed.ly'
