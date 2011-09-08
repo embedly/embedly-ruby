@@ -56,6 +56,7 @@ class Embedly::API
   # [:+key+] Your api.embed.ly key.
   # [:+secret+] Your api.embed.ly secret if you are using oauth.
   # [:+user_agent+] Your User-Agent header.  Defaults to Mozilla/5.0 (compatible; embedly-ruby/VERSION;)
+  # [:+timeout+] Request timeout (in seconds).  Defaults to 180 seconds or 3 minutes
   # [:+headers+] Additional headers to send with requests.
   def initialize opts={}
     @endpoints = [:oembed, :objectify, :preview]
@@ -64,6 +65,7 @@ class Embedly::API
     @api_version = Hash.new('1')
     @api_version.merge!({:objectify => '2'})
     @hostname = opts[:hostname] || 'api.embed.ly'
+    @timeout = opts[:timeout] || 180
     @headers = {
       'User-Agent' => opts[:user_agent] || "Mozilla/5.0 (compatible; embedly-ruby/#{Embedly::VERSION};)"
     }.merge(opts[:headers]||{})
@@ -73,13 +75,14 @@ class Embedly::API
     scheme, host, port = uri_parse hostname
     url = "#{scheme}://#{hostname}:#{port}#{path}"
     logger.debug { "calling #{site}#{path} with headers #{headers} using Typhoeus" }
-    Typhoeus::Request.get(url, {:headers => headers})
+    Typhoeus::Request.get(url, {:headers => headers, :timeout => (@timeout*1000) })
   end
 
   def _do_basic_call path
     scheme, host, port = uri_parse hostname
     logger.debug { "calling #{site}#{path} with headers #{headers} using Net::HTTP" }
     Net::HTTP.start(host, port, :use_ssl => scheme == 'https') do |http|
+      http.read_timeout = @timeout
       http.get(path, headers)
     end
   end
