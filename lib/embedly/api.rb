@@ -7,6 +7,13 @@ require 'embedly/exceptions'
 require 'querystring'
 require 'oauth'
 
+# Checks if Typhoeus is installed and if not, set a constant stating that
+begin
+  require 'typhoeus'
+  HAS_TYPHOEUS = true
+rescue LoadError
+  HAS_TYPHOEUS = false
+end
 
 # Performs api calls to embedly.
 #
@@ -62,9 +69,16 @@ class Embedly::API
     }.merge(opts[:headers]||{})
   end
 
+  def _do_typhoeus_call path
+    scheme, host, port = uri_parse hostname
+    url = "#{scheme}://#{hostname}:#{port}#{path}"
+    logger.debug { "calling #{site}#{path} with headers #{headers} using Typhoeus" }
+    Typhoeus::Request.get(url, {:headers => headers})
+  end
+
   def _do_basic_call path
     scheme, host, port = uri_parse hostname
-    logger.debug { "calling #{site}#{path} with headers #{headers}" }
+    logger.debug { "calling #{site}#{path} with headers #{headers} using Net::HTTP" }
     Net::HTTP.start(host, port, :use_ssl => scheme == 'https') do |http|
       http.get(path, headers)
     end
@@ -87,7 +101,7 @@ class Embedly::API
     if key and secret
       _do_oauth_call path
     else
-      _do_basic_call path
+      HAS_TYPHOEUS ? _do_typhoeus_call(path) : _do_basic_call(path)
     end
   end
 
