@@ -2,7 +2,7 @@
 lib = File.expand_path('../lib/', __FILE__)
 $:.unshift lib unless $:.include?(lib)
 
-require "embedly-ruby/version"
+require "embedly/version"
 
 Gem::Specification.new do |s|
   s.name        = "embedly-ruby"
