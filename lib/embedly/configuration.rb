@@ -1,3 +1,5 @@
+require 'logger'
+
 class Embedly::Configuration
   attr_accessor :key
 
