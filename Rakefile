@@ -49,4 +49,6 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
 
-task :default => :features
+task :all_specs => [:spec, :features]
+
+task :default => :all_specs
