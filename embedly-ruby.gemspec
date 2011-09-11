@@ -5,7 +5,7 @@ $:.unshift lib unless $:.include?(lib)
 require "embedly/version"
 
 Gem::Specification.new do |s|
-  s.name        = "embedly"
+  s.name        = "embedly-ruby"
   s.version     = Embedly::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Bob Corsaro"]
