@@ -5,14 +5,15 @@ $:.unshift lib unless $:.include?(lib)
 require "embedly/version"
 
 Gem::Specification.new do |s|
-  s.name        = "embedly-ruby"
+  s.name        = "embedly"
   s.version     = Embedly::VERSION
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ["embedly"]
-  s.email       = ["support@embed.ly"]
-  s.homepage    = %q{http://github.com/embedly/embedly-ruby}
-  s.summary     = "Ruby Embedly Client"
+  s.authors     = ["Bob Corsaro"]
+  s.email       = ["bob@embed.ly"]
+  s.homepage    = "http://github.com/embedly/embedly-ruby"
+  s.summary     = "Ruby Embedly client library"
   s.description = "Embedly ruby client library. To find out what Embedly is all about, please visit embed.ly. To see our api documentation, visit api.embed.ly/docs."
+  s.license     = "MIT"
 
   s.add_dependency("querystring", ">= 0.1.0")
 
