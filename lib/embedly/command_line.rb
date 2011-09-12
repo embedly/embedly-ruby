@@ -89,7 +89,7 @@ Usage [OPTIONS] <url> [url] ..
           parser.separator "Common Options:"
 
           parser.on("-v", "--[no-]verbose", "Run verbosely") do |verbose|
-            Embedly::Config.logging = verbose
+            Embedly.configuration.debug = verbose
           end
 
           parser.on("-h", "--help", "Display this message") do

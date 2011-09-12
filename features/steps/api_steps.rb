@@ -8,8 +8,8 @@ Given /an embedly api( with key)?$/ do |key_enabled|
   opts = {}
   if key_enabled
     raise 'Please set env variable $EMBEDLY_KEY' unless ENV['EMBEDLY_KEY']
-    opts[:key] = ENV["EMBEDLY_KEY"] 
-    opts[:secret] = ENV["EMBEDLY_SECRET"] 
+    opts[:key] = ENV["EMBEDLY_KEY"]
+    opts[:secret] = ENV["EMBEDLY_SECRET"]
   end
   if not HOSTNAMES[opts]
     HOSTNAMES[opts] = Embedly::API.new opts
@@ -44,18 +44,13 @@ end
 
 Then /([^\s]+) should be (.+)$/ do |key, value|
   raise @error if @error
-  logger = Embedly.logger('api_steps')
-  @result.collect do |o|  
-    logger.debug { "result: #{o.marshal_dump}"}
+  @result.collect do |o|
     o.send(key).to_s
   end.join(',').should == value
 end
 
 Then /([^\s]+) should start with ([^\s]+)/ do |key, value|
   raise @error if @error
-  logger = Embedly.logger('api_steps')
-  logger.debug { "result: #{@result[0].marshal_dump}"}
   v = key.split('.').inject(@result[0]){|o,c| o.send(c)}.to_s
   v.to_s.should match(/^#{value}/)
 end
-

@@ -98,12 +98,12 @@ module Embedly
       describe "with --verbose" do
         it "enables logging" do
           command(["--verbose"])
-          Embedly::Config.logging.should be_true
+          Embedly.configuration.should be_debug
         end
 
         it "disables logging" do
           command(["--no-verbose"])
-          Embedly::Config.logging.should be_false
+          Embedly.configuration.should_not be_debug
         end
       end
     end

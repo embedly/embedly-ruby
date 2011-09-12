@@ -1,3 +1,10 @@
+require 'aruba/cucumber'
 require 'embedly'
 
-Embedly::Config.logging = true if ENV["EMBEDLY_VERBOSE"]
+Before do
+  @aruba_timeout_seconds = 15
+end
+
+Embedly.configure do |config|
+  config.debug = !!ENV["EMBEDLY_VERBOSE"]
+end
