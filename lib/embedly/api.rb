@@ -2,11 +2,11 @@ require 'net/http'
 require 'net/https'
 require 'json'
 require 'ostruct'
+require 'embedly/configuration'
 require 'embedly/model'
 require 'embedly/exceptions'
 require 'querystring'
 require 'oauth'
-
 
 # Performs api calls to embedly.
 #
@@ -39,10 +39,6 @@ require 'oauth'
 class Embedly::API
   attr_reader :key, :hostname, :api_version, :headers, :secret
 
-  def logger *args
-    Embedly.logger *args
-  end
-
   # === Options
   #
   # [:+hostname+] Hostname of embedly server.  Defaults to api.embed.ly.
@@ -72,10 +68,10 @@ class Embedly::API
 
   def _do_oauth_call path
     consumer = OAuth::Consumer.new(key, secret,
-      :site => site, 
+      :site => site,
       :http_method => :get,
       :scheme => :query_string)
-    # our implementation is broken for header authorization, thus the 
+    # our implementation is broken for header authorization, thus the
     # query_string
 
     access_token = OAuth::AccessToken.new consumer
@@ -140,7 +136,7 @@ class Embedly::API
       if response.code.to_i == 200
         logger.debug { response.body }
         # [].flatten is to be sure we have an array
-        objs = [JSON.parse(response.body)].flatten.collect do |o| 
+        objs = [JSON.parse(response.body)].flatten.collect do |o|
           Embedly::EmbedlyObject.new(o)
         end
       else
@@ -218,7 +214,10 @@ class Embedly::API
   end
 
   def logger
-    @logger ||= Embedly.logger('API')
+    configuration.logger
   end
 
+  def configuration
+    Embedly.configuration
+  end
 end

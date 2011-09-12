@@ -52,6 +52,18 @@ You can find rdocs at http://rubydoc.info/github/embedly/embedly-ruby/master/fra
   obj = embedly_api.preview :url => url
   puts JSON.pretty_generate(obj[0].marshal_dump)
 
+== Configuration options
+
+You can configure some parameters in the api:
+
+ Embedly.configure do |config|
+   # prints debug messages to the logger
+   config.debug = true
+
+   # use a custom logger
+   config.logger = MyAwesomeLogger.new(STDERR)
+ end
+
 == Testing
 
   gem install jeweler
