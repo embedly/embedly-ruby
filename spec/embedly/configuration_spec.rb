@@ -48,6 +48,10 @@ module Embedly
         config.key = 'my_api_key'
         config.key.should == 'my_api_key'
       end
+
+      it "requests typoeus by default" do
+        config.typhoeus.should be_true
+      end
     end
   end
 end

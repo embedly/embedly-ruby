@@ -43,8 +43,9 @@ class Embedly::Configuration
 
   # reset configuration
   def reset
-    self.logger = default_logger
-    self.debug  = false
+    self.logger   = default_logger
+    self.debug    = false
+    self.typhoeus = true
   end
 
   private
