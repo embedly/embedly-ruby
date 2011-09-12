@@ -62,6 +62,9 @@ You can configure some parameters in the api:
 
    # use a custom logger
    config.logger = MyAwesomeLogger.new(STDERR)
+
+   # disable typhoeus and use Net::HTTP instead
+   config.typhoeus = false
  end
 
 == Testing

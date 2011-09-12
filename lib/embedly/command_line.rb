@@ -32,7 +32,8 @@ module Embedly
           :key => ENV['EMBEDLY_KEY'],
           :secret => ENV['EMBEDLY_SECRET'],
           :headers => {},
-          :query => {}
+          :query => {},
+          :typhoeus => true
         }
       end
 
@@ -85,6 +86,10 @@ Usage [OPTIONS] <url> [url] ..
             options[:query][key.to_sym] = value
           end
 
+          parser.on("--no-typhoeus", "Don't use typhoeus.") do
+            Embedly.configuration.typhoeus = false
+          end
+
           parser.separator ""
           parser.separator "Common Options:"
 
@@ -121,6 +126,7 @@ Usage [OPTIONS] <url> [url] ..
 
     def options
       @options = Parser.parse!(@args.dup)
+      @options
     end
   end
 end

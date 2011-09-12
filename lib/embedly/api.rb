@@ -7,14 +7,7 @@ require 'embedly/model'
 require 'embedly/exceptions'
 require 'querystring'
 require 'oauth'
-
-# Checks if Typhoeus is installed and if not, set a constant stating that
-begin
-  require 'typhoeus'
-  HAS_TYPHOEUS = true
-rescue LoadError
-  HAS_TYPHOEUS = false
-end
+require 'typhoeus'
 
 # Performs api calls to embedly.
 #
@@ -101,7 +94,7 @@ class Embedly::API
     if key and secret
       _do_oauth_call path
     else
-      HAS_TYPHOEUS ? _do_typhoeus_call(path) : _do_basic_call(path)
+      configuration.typhoeus ? _do_typhoeus_call(path) : _do_basic_call(path)
     end
   end
 

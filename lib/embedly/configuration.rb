@@ -18,7 +18,7 @@ require 'logger'
 #   end
 #
 class Embedly::Configuration
-  attr_accessor :key # :nodoc:
+  attr_accessor :key, :typhoeus # :nodoc:
 
   def initialize # :nodoc:
     self.reset

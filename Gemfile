@@ -2,6 +2,7 @@ source :rubygems
 
 gem "querystring"
 gem "oauth"
+gem "typhoeus"
 
 group :development do
   gem "jeweler"
