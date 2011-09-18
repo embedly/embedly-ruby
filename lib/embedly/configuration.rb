@@ -6,6 +6,7 @@ require 'logger'
 #
 # * [+debug+] Prints debugging information to logger. Default +false+. Errors still will be logged
 # * [+logger+] Configure the logger; set this if you want to use a custom logger.
+# * [+request_with+] Sets the desired library to perform requests. Default is +Typhoeus+
 #
 # === Usage
 #
@@ -15,6 +16,9 @@ require 'logger'
 #
 #     # customize the logger
 #     config.logger = MyAwesomeLogger.new(STDERR)
+#
+#     # performs requests with net/http
+#     config.request_with :net_http
 #   end
 #
 class Embedly::Configuration
@@ -41,18 +45,38 @@ class Embedly::Configuration
     set_logger_level(self.debug?)
   end
 
+  # Configures a new requester
+  #
+  # To add a new requester class, you can do the following:
+  #
+  #    Embedly.configuration.add_requester :custom do |api|
+  #      MyRequester.new(api)
+  #    end
+  #
+  # The requester class should respond to +get+ method, which performs the request
+  # for more details, see +embedly/request/base.rb+
   def add_requester(name, &block)
     requesters[name] = block
   end
 
-  def requesters
+  def requesters # :nodoc:
     @requesters ||= {}
   end
 
+  # Sets api to use the desired requester class
+  #
+  # When configuring the API, you can do the following:
+  #
+  #    Embedly.configure do |config|
+  #      config.request_with :net_http
+  #    end
+  #
+  # This way, the API will use the +net_http+ class to perform requests
   def request_with(adapter_name)
     self.requester = adapter_name
   end
 
+  # Returns the current configured request block
   def current_requester
     requesters[requester]
   end

@@ -1,8 +1,9 @@
 require "typhoeus"
 
 module Embedly
-  module Typhoeus
+  module Typhoeus # :nodoc:
     class Request < Embedly::Request::Base
+      # Perform request using typhoeus
       def get(uri, options = {})
         options[:timeout] *= 1000
         ::Typhoeus::Request.get uri.to_s, :headers => options[:headers], :timeout => options[:timeout]
