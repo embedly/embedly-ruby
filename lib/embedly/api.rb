@@ -1,13 +1,11 @@
-require 'net/http'
-require 'net/https'
 require 'json'
 require 'ostruct'
 require 'embedly/configuration'
 require 'embedly/model'
 require 'embedly/exceptions'
+require 'embedly/request'
 require 'querystring'
 require 'oauth'
-require 'typhoeus'
 
 # Performs api calls to embedly.
 #
@@ -54,27 +52,11 @@ class Embedly::API
     @secret = opts[:secret] == "" ? nil : opts[:secret]
     @api_version = Hash.new('1')
     @api_version.merge!({:objectify => '2'})
-    @hostname = opts[:hostname] || 'api.embed.ly'
+    @hostname = opts[:hostname] || 'http://api.embed.ly'
     @timeout = opts[:timeout] || 180
     @headers = {
       'User-Agent' => opts[:user_agent] || "Mozilla/5.0 (compatible; embedly-ruby/#{Embedly::VERSION};)"
     }.merge(opts[:headers]||{})
-  end
-
-  def _do_typhoeus_call path
-    scheme, host, port = uri_parse hostname
-    url = "#{scheme}://#{hostname}:#{port}#{path}"
-    logger.debug { "calling #{site}#{path} with headers #{headers} using Typhoeus" }
-    Typhoeus::Request.get(url, {:headers => headers, :timeout => (@timeout*1000) })
-  end
-
-  def _do_basic_call path
-    scheme, host, port = uri_parse hostname
-    logger.debug { "calling #{site}#{path} with headers #{headers} using Net::HTTP" }
-    Net::HTTP.start(host, port, :use_ssl => scheme == 'https') do |http|
-      http.read_timeout = @timeout
-      http.get(path, headers)
-    end
   end
 
   def _do_oauth_call path
@@ -94,7 +76,9 @@ class Embedly::API
     if key and secret
       _do_oauth_call path
     else
-      configuration.typhoeus ? _do_typhoeus_call(path) : _do_basic_call(path)
+      logger.debug { "calling #{site}#{path} with headers #{headers} using #{request}" }
+      uri = URI.join(hostname, path)
+      request.get(uri, :headers => headers, :timeout => @timeout)
     end
   end
 
@@ -213,7 +197,12 @@ class Embedly::API
     end
   end
 
+  def request
+    configuration.current_requester.call(self)
+  end
+
   private
+
   def uri_parse uri
     uri =~ %r{^((http(s?))://)?([^:/]+)(:([\d]+))?(/.*)?$}
     scheme = $2 || 'http'

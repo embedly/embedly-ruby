@@ -49,8 +49,18 @@ module Embedly
         config.key.should == 'my_api_key'
       end
 
-      it "requests typoeus by default" do
-        config.typhoeus.should be_true
+      it "requests typhoeus by default" do
+        config.requester.should == :typhoeus
+      end
+    end
+
+    describe "registering a requester" do
+      it "adds a new requester" do
+        config.add_requester :sample do |api|
+          Embedly::NetHTTP::Request.new(api)
+        end
+        config.request_with :sample
+        config.current_requester.call({}).should be_a(Embedly::NetHTTP::Request)
       end
     end
   end

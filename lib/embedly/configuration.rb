@@ -18,7 +18,7 @@ require 'logger'
 #   end
 #
 class Embedly::Configuration
-  attr_accessor :key, :typhoeus # :nodoc:
+  attr_accessor :key, :requester # :nodoc:
 
   def initialize # :nodoc:
     self.reset
@@ -41,11 +41,27 @@ class Embedly::Configuration
     set_logger_level(self.debug?)
   end
 
+  def add_requester(name, &block)
+    requesters[name] = block
+  end
+
+  def requesters
+    @requesters ||= {}
+  end
+
+  def request_with(adapter_name)
+    self.requester = adapter_name
+  end
+
+  def current_requester
+    requesters[requester]
+  end
+
   # reset configuration
   def reset
     self.logger   = default_logger
     self.debug    = false
-    self.typhoeus = true
+    self.request_with :typhoeus
   end
 
   private

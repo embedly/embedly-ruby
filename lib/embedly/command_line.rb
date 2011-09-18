@@ -93,7 +93,7 @@ Usage [OPTIONS] <url> [url] ..
           end
 
           parser.on("--no-typhoeus", "Don't use typhoeus.") do
-            Embedly.configuration.typhoeus = false
+            Embedly.configuration.request_with :net_http
           end
 
           parser.separator ""

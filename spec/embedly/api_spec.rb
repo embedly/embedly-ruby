@@ -19,5 +19,37 @@ module Embedly
         io.string.should =~ %r{.*DEBUG -- : .*}
       end
     end
+
+    describe "requesters" do
+      describe "net/http" do
+        before do
+          Embedly.configure { |c| c.request_with :net_http }
+        end
+
+        it "sets the correct request adapter" do
+          api.request.should be_a(Embedly::NetHTTP::Request)
+        end
+
+        it "requests succesfully" do
+          request = api.oembed :url => 'http://blog.doki-pen.org/'
+          request.first.provider_url.should == 'http://posterous.com'
+        end
+      end
+
+      describe "typhoeus" do
+        before do
+          Embedly.configure { |c| c.request_with :typhoeus }
+        end
+
+        it "sets the correct request adapter" do
+          api.request.should be_a(Embedly::Typhoeus::Request)
+        end
+
+        it "requests succesfully" do
+          request = api.oembed :url => 'http://blog.doki-pen.org/'
+          request.first.provider_url.should == 'http://posterous.com'
+        end
+      end
+    end
   end
 end
