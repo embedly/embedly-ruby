@@ -152,7 +152,7 @@ class Embedly::API
         end
       else
         logger.debug { response }
-        raise Embedly::BadResponseException.new response
+        raise Embedly::BadResponseException.new(response, path)
       end
 
       # re-insert rejects into response
