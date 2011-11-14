@@ -71,7 +71,8 @@ class Embedly::API
   def _do_basic_call path
     scheme, host, port = uri_parse hostname
     logger.debug { "calling #{site}#{path} with headers #{headers} using Net::HTTP" }
-    Net::HTTP.start(host, port, :use_ssl => scheme == 'https') do |http|
+    Net::HTTP.start(host, port) do |http|
+      http.use_ssl = (scheme == 'https')
       http.read_timeout = @timeout
       http.get(path, headers)
     end
