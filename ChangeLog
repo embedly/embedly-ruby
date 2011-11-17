@@ -1,3 +1,11 @@
+*embedly-1.4.0 (17 Nov 2011)
+
+	17 Nov 2011: Bob Corsaro <bob@embed.ly>
+	Adds timeout support to cli
+
+	18 Oct 2011: Arun Thampi <arun.thampi@gmail.com>
+	Adds better error messages
+
 *embedly-1.3.0 (12 Sep 2011)
 
 	12 Sep 2011: Russ Bradberry, Bob Corsaro <bob@embed.ly>

@@ -18,7 +18,12 @@ Jeweler::Tasks.new do |gem|
   gem.description = %Q{Ruby Embedly client library}
   gem.email = "bob@embed.ly"
   gem.homepage = "http://github.com/embedly/embedly-ruby"
-  gem.authors = ["Bob Corsaro"]
+  gem.authors = [
+                 "Bob Corsaro", 
+                 "Filipe Elias Philipp", 
+                 "Russ Bradberry", 
+                 "Arun Thampi"
+                ]
   gem.license = "MIT"
 
   # in Gemfile
