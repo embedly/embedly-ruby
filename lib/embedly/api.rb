@@ -120,17 +120,24 @@ class Embedly::API
 
     # store unsupported services as errors and don't send them to embedly
     rejects = []
-    if not key
-      params[:urls].reject!.with_index do |url, i|
-        if url !~ services_regex
-          rejects << [i,
-            Embedly::EmbedlyObject.new(
-              :type => 'error',
-              :error_code => 401,
-              :error_message => 'Embedly api key is required.'
-            )
-          ]
-        end
+
+    params[:urls].reject!.with_index do |url, i|
+      if !key && url !~ services_regex
+        rejects << [i,
+          Embedly::EmbedlyObject.new(
+            :type => 'error',
+            :error_code => 401,
+            :error_message => 'Embedly api key is required.'
+          )
+        ]
+      elsif url.length > 2048
+        rejects << [i,
+          Embedly::EmbedlyObject.new(
+            :type => 'error',
+            :error_code => 414,
+            :error_message => 'URL too long.'
+          )
+        ]
       end
     end
 
