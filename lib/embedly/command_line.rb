@@ -1,5 +1,6 @@
 require "optparse"
 
+Embedly.configuration.typhoeus = true
 module Embedly
   class CommandLine
 
@@ -31,6 +32,7 @@ module Embedly
         {
           :key => ENV['EMBEDLY_KEY'],
           :secret => ENV['EMBEDLY_SECRET'],
+          :timeout => nil,
           :headers => {},
           :query => {},
           :typhoeus => true
@@ -79,6 +81,10 @@ Usage [OPTIONS] <url> [url] ..
 
           parser.on("--no-secret", "Ignore EMBEDLY_SECRET environmental variable") do
             options[:secret] = nil
+          end
+
+          parser.on("--timeout TIMEOUT", "Request timeout") do |timeout|
+            options[:timeout] = timeout.to_i
           end
 
           parser.on("-o", "--option NAME=VALUE", "Set option to be passed as query param.") do |option|
