@@ -9,11 +9,11 @@ module Embedly
     end
 
     describe "::run!" do
-      let(:arguments) { ['-k', 'MY_KEY', 'http://yfrog.com/h7qqespj', '-o', 'maxwidth=10'] }
+      let(:arguments) { ['-k', 'MY_KEY', '--no-secret', 'http://yfrog.com/h7qqespj', '-o', 'maxwidth=10'] }
       let(:api) { mock(API) }
 
       it "calls api with options" do
-        API.should_receive(:new).with(:key => 'MY_KEY', :headers => {}) { api }
+        API.should_receive(:new).with(:key => 'MY_KEY', :headers => {}, :typhoeus => true) { api }
         api.should_receive(:oembed).with(:urls => ['http://yfrog.com/h7qqespj'], :maxwidth => '10')
         CommandLine.run!(:oembed, arguments)
       end

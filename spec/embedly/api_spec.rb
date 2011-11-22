@@ -2,7 +2,7 @@ require "spec_helper"
 
 module Embedly
   describe API do
-    let(:api) { API.new :key => ENV['EMBEDLY_KEY'] }
+    let(:api) { API.new :key => ENV['EMBEDLY_KEY'], :secret => ENV['EMBEDLY_SECRET'] }
 
     describe "logger" do
       let(:io) { StringIO.new }
@@ -16,7 +16,7 @@ module Embedly
 
       it "logs if debug is enabled" do
         api.oembed :url => 'http://blog.doki-pen.org/'
-        io.string.should =~ %r{DEBUG -- : calling http://api.embed.ly/1/oembed?}
+        io.string.should =~ %r{.*DEBUG -- : .*}
       end
     end
   end
