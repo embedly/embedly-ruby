@@ -1,6 +1,5 @@
 require "optparse"
 
-Embedly.configuration.typhoeus = true
 module Embedly
   class CommandLine
 
