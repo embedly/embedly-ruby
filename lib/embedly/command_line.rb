@@ -1,6 +1,5 @@
 require "optparse"
 
-Embedly.configuration.typhoeus = true
 module Embedly
   class CommandLine
 
@@ -93,7 +92,7 @@ Usage [OPTIONS] <url> [url] ..
           end
 
           parser.on("--no-typhoeus", "Don't use typhoeus.") do
-            Embedly.configuration.typhoeus = false
+            Embedly.configuration.request_with :net_http
           end
 
           parser.separator ""

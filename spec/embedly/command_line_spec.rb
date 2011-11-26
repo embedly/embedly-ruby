@@ -87,6 +87,13 @@ module Embedly
         end
       end
 
+      describe "with --no-typhoeus" do
+        it "sets the request with net/http" do
+          command(['--no-typhoeus'])
+          Embedly.configuration.requester.should == :net_http
+        end
+      end
+
       describe "with --option" do
         %w[-o --option].each do |option|
           it "sets custom option with #{option}" do
