@@ -20,7 +20,7 @@ Jeweler::Tasks.new do |gem|
   gem.homepage = "http://github.com/embedly/embedly-ruby"
   gem.authors = [
                  "Bob Corsaro", 
-                 "Filipe Elias Philipp", 
+                 "Felipe Elias Philipp",
                  "Russ Bradberry", 
                  "Arun Thampi"
                 ]
