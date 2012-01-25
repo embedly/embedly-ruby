@@ -44,7 +44,7 @@ YARD::Rake::YardocTask.new do |t|
     t.files = FileList['lib/**/*.rb'].exclude('lib/jeweler/templates/**/*.rb')
 end
 
-require 'rake/rdoctask'
+require 'rdoc/task'
 Rake::RDocTask.new do |rdoc|
   version = File.exist?('VERSION') ? File.read('VERSION') : ""
 
