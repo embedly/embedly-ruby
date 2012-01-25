@@ -1,8 +1,11 @@
 = embedly
 
-Embedly ruby client library.  To find out what Embedly is all about, please
-visit http://embed.ly.  To see our api documentation, visit
-http://api.embed.ly/docs.
+embedly is the Embedly Ruby client library and commandline tool.  It allows
+you to integrate Embedly into your Ruby applications, as well as use
+Embedly's API from the commandline.
+
+To find out what Embedly is all about, please visit http://embed.ly.  To see
+our api documentation, visit http://api.embed.ly/docs.
 
 == Installing
 
