@@ -50,7 +50,7 @@ class Embedly::API
   # [:+headers+] Additional headers to send with requests.
   def initialize opts={}
     @endpoints = [:oembed, :objectify, :preview]
-    @key = opts[:key]
+    @key = opts[:key] || configuration.key
     @secret = opts[:secret] == "" ? nil : opts[:secret]
     @api_version = Hash.new('1')
     @api_version.merge!({:objectify => '2'})
