@@ -7,7 +7,10 @@ require 'embedly/model'
 require 'embedly/exceptions'
 require 'querystring'
 require 'oauth'
-require 'typhoeus'
+begin
+  require 'typhoeus'
+rescue LoadError => e
+end
 
 # Performs api calls to embedly.
 #
