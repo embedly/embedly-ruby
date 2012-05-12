@@ -2,6 +2,7 @@ source :rubygems
 
 gem "querystring"
 gem "oauth"
+gem "json"
 
 platforms :ruby do
   gem "typhoeus"
