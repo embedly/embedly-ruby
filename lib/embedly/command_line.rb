@@ -1,6 +1,12 @@
 require "optparse"
 
-Embedly.configuration.typhoeus = true
+begin
+  require "typhoeus"
+  Embedly.configuration.typhoeus = true
+rescue LoadError
+  Embedly.configuration.typhoeus = false
+end
+
 module Embedly
   class CommandLine
 
@@ -35,7 +41,7 @@ module Embedly
           :timeout => nil,
           :headers => {},
           :query => {},
-          :typhoeus => true
+          :typhoeus => Embedly.configuration.typhoeus
         }
       end
 

@@ -4,7 +4,7 @@ gem "querystring"
 gem "oauth"
 gem "json"
 
-platforms :ruby do
+platforms :mri do
   gem "typhoeus"
 end
 
