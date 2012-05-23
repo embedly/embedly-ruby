@@ -4,13 +4,17 @@ class Embedly::EmbedlyObject < OpenStruct
 
   # Resursively make ostruct
   def initialize obj
-    o = obj.clone
-    o.each do |k,v|
-      if v.is_a?Hash
-        o[k] = Embedly::EmbedlyObject.new v
+    if obj
+      o = obj.clone
+      o.each do |k,v|
+        if v.is_a?Hash
+          o[k] = Embedly::EmbedlyObject.new v
+        end
       end
+      super o
+    else
+      super
     end
-    super o
   end
 
   # for ruby 1.8.x, type should return @table[:type], not the
