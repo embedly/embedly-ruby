@@ -41,7 +41,7 @@ end
 #   api.new_method :arg1 => '1', :arg2 => '2'
 #
 class Embedly::API
-  attr_reader :key, :hostname, :api_version, :headers, :secret
+  attr_reader :key, :hostname, :api_version, :headers, :secret, :proxy
 
   # === Options
   #
@@ -51,6 +51,7 @@ class Embedly::API
   # [:+user_agent+] Your User-Agent header.  Defaults to Mozilla/5.0 (compatible; embedly-ruby/VERSION;)
   # [:+timeout+] Request timeout (in seconds).  Defaults to 180 seconds or 3 minutes
   # [:+headers+] Additional headers to send with requests.
+  # [:+proxy+] Proxy settings in format {:host => '', :port => '', :user => '', :password => ''}
   def initialize opts={}
     @endpoints = [:oembed, :objectify, :preview]
     @key = opts[:key]
@@ -62,6 +63,7 @@ class Embedly::API
     @headers = {
       'User-Agent' => opts[:user_agent] || "Mozilla/5.0 (compatible; embedly-ruby/#{Embedly::VERSION};)"
     }.merge(opts[:headers]||{})
+    @proxy = opts[:proxy]
   end
 
   def _do_typhoeus_call path
@@ -74,7 +76,12 @@ class Embedly::API
   def _do_basic_call path
     scheme, host, port = uri_parse hostname
     logger.debug { "calling #{site}#{path} with headers #{headers} using Net::HTTP" }
-    Net::HTTP.start(host, port) do |http|
+    http_class = if proxy
+      http_class = Net::HTTP::Proxy(proxy[:host], proxy[:port], proxy[:user], proxy[:password])
+    else
+      Net::HTTP
+    end
+    http_class.start(host, port) do |http|
       http.use_ssl = (scheme == 'https')
       http.read_timeout = @timeout
       http.get(path, headers)
