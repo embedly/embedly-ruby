@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+$:.unshift(File.expand_path('../../lib', __FILE__))
+%w{embedly embedly/command_line json optparse ostruct}.each {|l| require l}
+
+api = Embedly::CommandLine.run!(:extract, ARGV)
+
+begin
+  data = api.flatten.collect { |o| o.marshal_dump }
+  puts JSON.pretty_generate(data)
+rescue Embedly::BadResponseException => e
+  puts "#{e.response.code} :: #{e.response.message}"
+end

@@ -15,9 +15,9 @@ Feature: OEmbed
             | http://www.scribd.com/doc/28452730/Easter-Cards                                  | http://www.scribd.com/     |
             | http://www.youtube.com/watch?v=Zk7dDekYej0                                       | http://www.youtube.com/    |
             | http://yfrog.com/h7qqespj                                                        | http://yfrog.com           |
-            | http://blog.embed.ly/bob                                                         | http://blog.embed.ly/      |
-            | http://blog.doki-pen.org/cassandra-rules                                         | http://blog.doki-pen.org/  |
-            | http://www.guardian.co.uk/media/2011/jan/21/andy-coulson-phone-hacking-statement | http://www.guardian.co.uk/ |
+            | http://blog.embed.ly/bob                                                         | http://tumblr.com          |
+            | http://blog.doki-pen.org/cassandra-rules                                         | http://blog.doki-pen.org   |
+            | http://www.guardian.co.uk/media/2011/jan/21/andy-coulson-phone-hacking-statement | http://www.guardian.co.uk  |
 
 
     Scenario Outline: Get the types

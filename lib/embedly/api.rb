@@ -22,6 +22,7 @@ end
 # * +oembed+
 # * +objectify+
 # * +preview+
+# * +extract+
 #
 # All methods return ostructs, so fields can be accessed with the dot operator. ex.
 #
@@ -52,7 +53,7 @@ class Embedly::API
   # [:+timeout+] Request timeout (in seconds).  Defaults to 180 seconds or 3 minutes
   # [:+headers+] Additional headers to send with requests.
   def initialize opts={}
-    @endpoints = [:oembed, :objectify, :preview]
+    @endpoints = [:oembed, :objectify, :preview, :extract]
     @key = opts[:key]
     @secret = opts[:secret] == "" ? nil : opts[:secret]
     @api_version = Hash.new('1')
@@ -102,7 +103,8 @@ class Embedly::API
     end
   end
 
-  # <b>Use methods oembed, objectify, preview in favor of this method.</b>
+  # <b>Use methods oembed, objectify, preview and extract in favor of
+  # this method.</b>
   #
   # Normalizes url and urls parameters and calls the endpoint.  url OR urls
   # must be present
@@ -111,8 +113,8 @@ class Embedly::API
   #
   # [:+url+] _(optional)_ A single url
   # [:+urls+] _(optional)_ An array of urls
-  # [:+action+] The method that should be called. ex. oembed, objectify, preview
-  # [:+version+] The api version number.
+  # [:+action+] The method that should be called. ex. oembed, objectify,
+  #                   preview, extract [:+version+] The api version number.
   # [_others_] All other parameters are used as query strings.
   def apicall opts
     opts[:urls] ||= []
@@ -205,6 +207,7 @@ class Embedly::API
   # - +oembed+
   # - +objectify+
   # - +preview+
+  # - +extract+
   #
   def method_missing(name, *args, &block)
     if @endpoints.include?name
