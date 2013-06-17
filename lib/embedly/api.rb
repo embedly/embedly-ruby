@@ -68,6 +68,7 @@ class Embedly::API
   end
 
   def _do_typhoeus_call path
+    logger.debug { 'using Typhoeus HTTP Client' }
     scheme, host, port = uri_parse hostname
     url = "#{scheme}://#{hostname}:#{port}#{path}"
     logger.debug { "calling #{site}#{path} with headers #{headers} using Typhoeus" }
@@ -75,9 +76,11 @@ class Embedly::API
   end
 
   def _do_basic_call path
+    logger.debug { 'using Net:HTTP client' }
     scheme, host, port = uri_parse hostname
     logger.debug { "calling #{site}#{path} with headers #{headers} using Net::HTTP" }
     http_class = if proxy
+      logger.debug { 'using Net::HTTP::Proxy' }
       http_class = Net::HTTP::Proxy(proxy[:host], proxy[:port], proxy[:user], proxy[:password])
     else
       Net::HTTP

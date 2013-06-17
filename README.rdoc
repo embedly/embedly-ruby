@@ -73,7 +73,7 @@ You can configure some parameters in the api:
 == Testing
 
   gem install jeweler
-  rake rspec
+  rake spec
   rake features # if it complains of missing deps install them
 
 Some tests will fail due to missing api key.  Set the EMBEDLY_KEY environmental
