@@ -3,4 +3,6 @@ pkg/
 rdoc/
 doc/
 .yardoc/
+.ruby-gemset
+.ruby-version
 
