@@ -1,3 +1,21 @@
+*embedly-1.8.0 (17 Jun 2013)
+
+	17 Jun 2013: Felipe Elias Philipp <felipeelias@gmail.com>
+	Abstracts http client to allow for custom requesters
+
+	17 Jun 2013: Nitesh <me@coffeebite.com>
+	Gets key from Embedly::Configuration
+
+*embedly-1.7.0 (17 Jun 2013)
+
+	17 Jun 2013: Anton Dieterle <antondie@gmail.com>
+	Adds Net::HTTP::Proxy support
+
+*embedly-1.6.0 (2 Apr 2013)
+
+	2 Apr 2013: Bob Corsaro <bob@embed.ly>
+	Adds extract endpoint
+
 *embedly-1.5.6 (23 May 2012)
 
 	23 May 2012: Bob Corsaro <bob@embed.ly>

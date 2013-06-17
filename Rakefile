@@ -22,7 +22,9 @@ Jeweler::Tasks.new do |gem|
                  "Bob Corsaro", 
                  "Felipe Elias Philipp",
                  "Russ Bradberry", 
-                 "Arun Thampi"
+                 "Arun Thampi",
+                 "Anton Dieterle",
+                 "Nitesh"
                 ]
   gem.license = "MIT"
 
