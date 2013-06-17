@@ -5,30 +5,31 @@
 
 Gem::Specification.new do |s|
   s.name = "embedly"
-  s.version = "1.5.6"
+  s.version = "1.6.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Bob Corsaro", "Felipe Elias Philipp", "Russ Bradberry", "Arun Thampi"]
-  s.date = "2012-05-23"
+  s.date = "2013-06-17"
   s.description = "Ruby Embedly client library"
   s.email = "bob@embed.ly"
-  s.executables = ["embedly_objectify", "embedly_oembed", "embedly_preview"]
+  s.executables = ["embedly_extract", "embedly_objectify", "embedly_oembed", "embedly_preview"]
   s.extra_rdoc_files = [
     "ChangeLog",
     "README.rdoc"
   ]
   s.files = [
-    ".rvmrc",
     "ChangeLog",
     "Gemfile",
     "MIT-LICENSE",
     "README.rdoc",
     "Rakefile",
     "VERSION",
+    "bin/embedly_extract",
     "bin/embedly_objectify",
     "bin/embedly_oembed",
     "bin/embedly_preview",
     "cucumber.yml",
+    "embedly.gemspec",
     "features/command_line.feature",
     "features/objectify.feature",
     "features/oembed.feature",
@@ -48,7 +49,7 @@ Gem::Specification.new do |s|
   s.homepage = "http://github.com/embedly/embedly-ruby"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.19"
+  s.rubygems_version = "1.8.25"
   s.summary = "Ruby Embedly client library"
 
   if s.respond_to? :specification_version then
