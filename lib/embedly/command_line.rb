@@ -1,12 +1,5 @@
 require "optparse"
 
-begin
-  require "typhoeus"
-  Embedly.configuration.typhoeus = true
-rescue LoadError
-  Embedly.configuration.typhoeus = false
-end
-
 module Embedly
   class CommandLine
 
@@ -40,8 +33,7 @@ module Embedly
           :secret => ENV['EMBEDLY_SECRET'],
           :timeout => nil,
           :headers => {},
-          :query => {},
-          :typhoeus => Embedly.configuration.typhoeus
+          :query => {}
         }
       end
 
@@ -99,7 +91,7 @@ Usage [OPTIONS] <url> [url] ..
           end
 
           parser.on("--no-typhoeus", "Don't use typhoeus.") do
-            Embedly.configuration.typhoeus = false
+            Embedly.configuration.request_with :net_http
           end
 
           parser.separator ""

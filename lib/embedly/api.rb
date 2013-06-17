@@ -1,16 +1,11 @@
-require 'net/http'
-require 'net/https'
 require 'json'
 require 'ostruct'
 require 'embedly/configuration'
 require 'embedly/model'
 require 'embedly/exceptions'
+require 'embedly/request'
 require 'querystring'
 require 'oauth'
-begin
-  require 'typhoeus'
-rescue LoadError => e
-end
 
 # Performs api calls to embedly.
 #
@@ -59,37 +54,12 @@ class Embedly::API
     @secret = opts[:secret] == "" ? nil : opts[:secret]
     @api_version = Hash.new('1')
     @api_version.merge!({:objectify => '2'})
-    @hostname = opts[:hostname] || 'api.embed.ly'
+    @hostname = opts[:hostname] || 'http://api.embed.ly'
     @timeout = opts[:timeout] || 180
     @headers = {
       'User-Agent' => opts[:user_agent] || "Mozilla/5.0 (compatible; embedly-ruby/#{Embedly::VERSION};)"
     }.merge(opts[:headers]||{})
     @proxy = opts[:proxy]
-  end
-
-  def _do_typhoeus_call path
-    logger.debug { 'using Typhoeus HTTP Client' }
-    scheme, host, port = uri_parse hostname
-    url = "#{scheme}://#{hostname}:#{port}#{path}"
-    logger.debug { "calling #{site}#{path} with headers #{headers} using Typhoeus" }
-    Typhoeus::Request.get(url, {:headers => headers, :timeout => (@timeout*1000) })
-  end
-
-  def _do_basic_call path
-    logger.debug { 'using Net:HTTP client' }
-    scheme, host, port = uri_parse hostname
-    logger.debug { "calling #{site}#{path} with headers #{headers} using Net::HTTP" }
-    http_class = if proxy
-      logger.debug { 'using Net::HTTP::Proxy' }
-      http_class = Net::HTTP::Proxy(proxy[:host], proxy[:port], proxy[:user], proxy[:password])
-    else
-      Net::HTTP
-    end
-    http_class.start(host, port) do |http|
-      http.use_ssl = (scheme == 'https')
-      http.read_timeout = @timeout
-      http.get(path, headers)
-    end
   end
 
   def _do_oauth_call path
@@ -109,7 +79,9 @@ class Embedly::API
     if key and secret
       _do_oauth_call path
     else
-      configuration.typhoeus ? _do_typhoeus_call(path) : _do_basic_call(path)
+      logger.debug { "calling #{site}#{path} with headers #{headers} using #{request}" }
+      uri = URI.join(hostname, path)
+      request.get(uri, :headers => headers, :timeout => @timeout, :proxy => @proxy)
     end
   end
 
@@ -230,7 +202,12 @@ class Embedly::API
     end
   end
 
+  def request
+    configuration.current_requester.call(self)
+  end
+
   private
+
   def uri_parse uri
     uri =~ %r{^((http(s?))://)?([^:/]+)(:([\d]+))?(/.*)?$}
     scheme = $2 || 'http'
