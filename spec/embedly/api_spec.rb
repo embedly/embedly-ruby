@@ -1,5 +1,6 @@
 require "spec_helper"
 
+
 module Embedly
   describe API do
     let(:api) { API.new :key => ENV['EMBEDLY_KEY'], :secret => ENV['EMBEDLY_SECRET'] }
@@ -29,11 +30,6 @@ module Embedly
         it "sets the correct request adapter" do
           api.request.should be_a(Embedly::NetHTTP::Request)
         end
-
-        it "requests succesfully" do
-          request = api.oembed :url => 'http://blog.doki-pen.org/'
-          request.first.provider_url.should == 'http://posterous.com'
-        end
       end
 
       describe "typhoeus" do
@@ -43,11 +39,6 @@ module Embedly
 
         it "sets the correct request adapter" do
           api.request.should be_a(Embedly::Typhoeus::Request)
-        end
-
-        it "requests succesfully" do
-          request = api.oembed :url => 'http://blog.doki-pen.org/'
-          request.first.provider_url.should == 'http://posterous.com'
         end
       end
     end
