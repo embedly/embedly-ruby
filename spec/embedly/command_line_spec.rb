@@ -13,7 +13,7 @@ module Embedly
       let(:api) { mock(API) }
 
       it "calls api with options" do
-        API.should_receive(:new).with(:key => 'MY_KEY', :headers => {}, :typhoeus => true) { api }
+        API.should_receive(:new).with(:key => 'MY_KEY', :headers => {}) { api }
         api.should_receive(:oembed).with(:urls => ['http://yfrog.com/h7qqespj'], :maxwidth => '10')
         CommandLine.run!(:oembed, arguments)
       end
