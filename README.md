@@ -31,7 +31,8 @@ You can find rdocs at http://rubydoc.info/github/embedly/embedly-ruby/master/fra
 require 'embedly'
 require 'json'
 
-embedly_api = Embedly::API.new :user_agent => 'Mozilla/5.0 (compatible; mytestapp/1.0; my@email.com)'
+embedly_api =
+  Embedly::API.new :user_agent => 'Mozilla/5.0 (compatible; mytestapp/1.0; my@email.com)'
 
 # single url
 obj = embedly_api.oembed :url => 'http://www.youtube.com/watch?v=sPbJ4Z5D-n4&feature=topvideos'
@@ -41,7 +42,8 @@ puts json_obj
 
 # multiple urls with opts
 objs = embedly_api.oembed(
-  :urls => ['http://www.youtube.com/watch?v=sPbJ4Z5D-n4&feature=topvideos', 'http://twitpic.com/3yr7hk'],
+  :urls => ['http://www.youtube.com/watch?v=sPbJ4Z5D-n4&feature=topvideos',
+            'http://twitpic.com/3yr7hk'],
   :maxwidth => 450,
   :wmode => 'transparent',
   :method => 'after'
