@@ -31,7 +31,8 @@ You can find rdocs at http://rubydoc.info/github/embedly/embedly-ruby/master/fra
 require 'embedly'
 require 'json'
 
-embedly_api = Embedly::API.new :user_agent => 'Mozilla/5.0 (compatible; mytestapp/1.0; my@email.com)'
+embedly_api =
+  Embedly::API.new :user_agent => 'Mozilla/5.0 (compatible; mytestapp/1.0; my@email.com)'
 
 # single url
 obj = embedly_api.oembed :url => 'http://www.youtube.com/watch?v=sPbJ4Z5D-n4&feature=topvideos'
@@ -41,7 +42,8 @@ puts json_obj
 
 # multiple urls with opts
 objs = embedly_api.oembed(
-  :urls => ['http://www.youtube.com/watch?v=sPbJ4Z5D-n4&feature=topvideos', 'http://twitpic.com/3yr7hk'],
+  :urls => ['http://www.youtube.com/watch?v=sPbJ4Z5D-n4&feature=topvideos',
+            'http://twitpic.com/3yr7hk'],
   :maxwidth => 450,
   :wmode => 'transparent',
   :method => 'after'
@@ -53,7 +55,7 @@ puts json_obj
 embedly_api = Embedly::API.new :key => 'xxxxxxxxxxxxxxxxxxxxxxxxxx',
         :user_agent => 'Mozilla/5.0 (compatible; mytestapp/1.0; my@email.com)'
 url = 'http://www.guardian.co.uk/media/2011/jan/21/andy-coulson-phone-hacking-statement'
-obj = embedly_api.preview :url => url
+obj = embedly_api.extract :url => url
 puts JSON.pretty_generate(obj[0].marshal_dump)
 ```
 
