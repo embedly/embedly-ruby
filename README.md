@@ -71,8 +71,8 @@ Embedly.configure do |config|
  # use a custom logger
  config.logger = MyAwesomeLogger.new(STDERR)
 
- # disable typhoeus and use Net::HTTP instead
- config.request_with :net_http
+ # Choose a request adatper (net_http, typhoeus or faraday)
+ config.request_with :faraday
 end
 ```
 
