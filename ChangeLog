@@ -1,3 +1,7 @@
+*HEAD (Jan 2014)
+	15 Jan 2014: Roman Shterenzon <romanbsd@yahoo.com>
+	Remove Typhoeus as dependency
+
 *embedly-1.8.0 (17 Jun 2013)
 
 	17 Jun 2013: Felipe Elias Philipp <felipeelias@gmail.com>
