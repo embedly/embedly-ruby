@@ -15,5 +15,6 @@ group :development do
   gem "rspec"
   gem "yard"
   gem "aruba"
+  gem "faraday"
 end
 

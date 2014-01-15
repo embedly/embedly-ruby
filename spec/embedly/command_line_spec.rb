@@ -10,7 +10,7 @@ module Embedly
 
     describe "::run!" do
       let(:arguments) { ['-k', 'MY_KEY', '--no-secret', 'http://yfrog.com/h7qqespj', '-o', 'maxwidth=10'] }
-      let(:api) { mock(API) }
+      let(:api) { double(API) }
 
       it "calls api with options" do
         API.should_receive(:new).with(:key => 'MY_KEY', :headers => {}) { api }
