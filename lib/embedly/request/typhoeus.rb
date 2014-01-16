@@ -19,7 +19,4 @@ begin
     Embedly::Typhoeus::Request.new(api)
   end
 rescue LoadError
-  require "logger"
-  logger = Logger.new(STDERR)
-  logger.warn { "typhoeus failed to load" }
 end
