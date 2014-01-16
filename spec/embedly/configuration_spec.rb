@@ -49,8 +49,8 @@ module Embedly
         config.key.should == 'my_api_key'
       end
 
-      it "requests typhoeus by default" do
-        config.requester.should == :typhoeus
+      it "requests using Net::HTTP by default" do
+        config.requester.should == :net_http
       end
     end
 

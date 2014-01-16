@@ -15,13 +15,13 @@ Gem::Specification.new do |s|
   s.executables = ["embedly_extract", "embedly_objectify", "embedly_oembed", "embedly_preview"]
   s.extra_rdoc_files = [
     "ChangeLog",
-    "README.rdoc"
+    "README.md"
   ]
   s.files = [
     "ChangeLog",
     "Gemfile",
     "MIT-LICENSE",
-    "README.rdoc",
+    "README.md",
     "Rakefile",
     "VERSION",
     "bin/embedly_extract",
@@ -63,7 +63,7 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<querystring>, [">= 0"])
       s.add_runtime_dependency(%q<oauth>, [">= 0"])
       s.add_runtime_dependency(%q<json>, [">= 0"])
-      s.add_runtime_dependency(%q<typhoeus>, [">= 0"])
+      s.add_development_dependency(%q<typhoeus>, [">= 0"])
       s.add_development_dependency(%q<jeweler>, [">= 0"])
       s.add_development_dependency(%q<cucumber>, [">= 0"])
       s.add_development_dependency(%q<rake>, [">= 0"])
