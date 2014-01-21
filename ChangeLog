@@ -1,4 +1,4 @@
-*HEAD (Jan 2014)
+*embedly-1.9.0 (21 Jan 2014)
 	15 Jan 2014: Roman Shterenzon <romanbsd@yahoo.com>
 	Adds a Faraday request adapter
 	Remove Typhoeus as dependency, if it is installed manually, it will be
