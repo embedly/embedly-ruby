@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "embedly"
-  s.version = "1.8.0"
+  s.version = "1.9.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Bob Corsaro", "Felipe Elias Philipp", "Russ Bradberry", "Arun Thampi", "Anton Dieterle", "Nitesh"]
-  s.date = "2013-06-17"
+  s.authors = ["Bob Corsaro", "Felipe Elias Philipp", "Russ Bradberry", "Arun Thampi", "Anton Dieterle", "Nitesh", "Roman Shterenzon"]
+  s.date = "2014-01-21"
   s.description = "Ruby Embedly client library"
   s.email = "bob@embed.ly"
   s.executables = ["embedly_extract", "embedly_objectify", "embedly_oembed", "embedly_preview"]
@@ -43,6 +43,7 @@ Gem::Specification.new do |s|
     "lib/embedly/model.rb",
     "lib/embedly/request.rb",
     "lib/embedly/request/base.rb",
+    "lib/embedly/request/faraday.rb",
     "lib/embedly/request/net_http.rb",
     "lib/embedly/request/typhoeus.rb",
     "spec/embedly/api_spec.rb",
@@ -53,7 +54,7 @@ Gem::Specification.new do |s|
   s.homepage = "http://github.com/embedly/embedly-ruby"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.25"
+  s.rubygems_version = "1.8.24"
   s.summary = "Ruby Embedly client library"
 
   if s.respond_to? :specification_version then
@@ -70,6 +71,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<rspec>, [">= 0"])
       s.add_development_dependency(%q<yard>, [">= 0"])
       s.add_development_dependency(%q<aruba>, [">= 0"])
+      s.add_development_dependency(%q<faraday>, [">= 0"])
     else
       s.add_dependency(%q<querystring>, [">= 0"])
       s.add_dependency(%q<oauth>, [">= 0"])
@@ -81,6 +83,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<rspec>, [">= 0"])
       s.add_dependency(%q<yard>, [">= 0"])
       s.add_dependency(%q<aruba>, [">= 0"])
+      s.add_dependency(%q<faraday>, [">= 0"])
     end
   else
     s.add_dependency(%q<querystring>, [">= 0"])
@@ -93,6 +96,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<rspec>, [">= 0"])
     s.add_dependency(%q<yard>, [">= 0"])
     s.add_dependency(%q<aruba>, [">= 0"])
+    s.add_dependency(%q<faraday>, [">= 0"])
   end
 end
 
