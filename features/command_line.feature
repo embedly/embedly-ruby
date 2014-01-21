@@ -6,7 +6,7 @@ Feature: Command line runner
     When I run `embedly_oembed http://lockerz.com/s/136425091`
     Then the output should contain:
       """
-      "provider_url": "http://lockerz.com"
+      "provider_url": "http://pics.lockerz.com"
       """
 
   Scenario: Run oembed command verbosely

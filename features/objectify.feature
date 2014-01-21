@@ -12,4 +12,4 @@ Feature: Objectify
 
         Examples:
             | url                            | metadesc                                  |
-            | http://lockerz.com/s/136425091 | Top finds from friends & celebrities. Get |
+            | http://lockerz.com/s/136425091 | Collect the things you love. Earn         |

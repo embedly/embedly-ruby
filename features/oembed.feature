@@ -16,8 +16,6 @@ Feature: OEmbed
             | http://www.youtube.com/watch?v=Zk7dDekYej0                                       | http://www.youtube.com/    |
             | http://yfrog.com/h7qqespj                                                        | http://yfrog.com           |
             | http://blog.embed.ly/bob                                                         | http://tumblr.com          |
-            | http://blog.doki-pen.org/cassandra-rules                                         | http://blog.doki-pen.org   |
-            | http://www.guardian.co.uk/media/2011/jan/21/andy-coulson-phone-hacking-statement | http://www.guardian.co.uk  |
 
 
     Scenario Outline: Get the types
@@ -65,7 +63,7 @@ Feature: OEmbed
             | url                                                              |
             | http://www.youtube.com/watch/is/a/bad/url                        |
             | http://fav.me/alsfsdf                                            |
-        
+
 
     Scenario Outline: Attempt multi get 404 URLs
         Given an embedly api with key
@@ -77,8 +75,8 @@ Feature: OEmbed
             | urls                                                                             | errcode | types       |
             | http://www.youtube.com/watch/a/bassd/url,http://www.youtube.com/watch/ldf/asdlfj | 404,404 | error,error |
             | http://www.youtube.com/watch/zzzzasdf/kl,http://yfrog.com/h7qqespj               | 404,    | error,photo |
-            | http://yfrog.com/h7qqespj,http://www.youtube.com/watch/asdfasdfasdf              | ,404    | photo,error |
-            
+            | http://yfrog.com/h7qqespj,http://www.youtube.com/watch/asdfasdf/asdf             | ,404    | photo,error |
+
     Scenario Outline: Attempt to get 414 URL
         Given an embedly api with key
         When oembed is called with the <url> URL
