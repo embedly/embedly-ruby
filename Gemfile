@@ -4,11 +4,8 @@ gem "querystring"
 gem "oauth"
 gem "json"
 
-platforms :mri do
-  gem "typhoeus"
-end
-
 group :development do
+  gem "typhoeus"
   gem "jeweler"
   gem "cucumber"
   gem "rake"
@@ -17,4 +14,3 @@ group :development do
   gem "aruba"
   gem "faraday"
 end
-

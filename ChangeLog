@@ -1,6 +1,8 @@
 *HEAD (Jan 2014)
-  15 Jan 2014: Roman Shterenzon <romanbsd@yahoo.com>
-  Adds a Faraday request adapter
+	15 Jan 2014: Roman Shterenzon <romanbsd@yahoo.com>
+	Adds a Faraday request adapter
+	Remove Typhoeus as dependency, if it is installed manually, it will be
+		used by default
 
 *embedly-1.8.0 (17 Jun 2013)
 

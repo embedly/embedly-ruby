@@ -85,7 +85,7 @@ class Embedly::Configuration
   def reset
     self.logger   = default_logger
     self.debug    = false
-    self.request_with :typhoeus
+    self.request_with :net_http
   end
 
   private
