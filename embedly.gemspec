@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "embedly"
-  s.version = "1.9.0"
+  s.version = "1.9.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Bob Corsaro", "Felipe Elias Philipp", "Russ Bradberry", "Arun Thampi", "Anton Dieterle", "Nitesh", "Roman Shterenzon"]
-  s.date = "2014-01-21"
+  s.date = "2014-01-27"
   s.description = "Ruby Embedly client library"
   s.email = "bob@embed.ly"
   s.executables = ["embedly_extract", "embedly_objectify", "embedly_oembed", "embedly_preview"]
@@ -54,7 +54,7 @@ Gem::Specification.new do |s|
   s.homepage = "http://github.com/embedly/embedly-ruby"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.24"
+  s.rubygems_version = "1.8.25"
   s.summary = "Ruby Embedly client library"
 
   if s.respond_to? :specification_version then
