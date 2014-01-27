@@ -1,3 +1,7 @@
+*embedly-1.9.1 (27 Jan 2014)
+	17 Jan 2014: Bob Corsaro <bob@embed.ly>
+	Don't require faraday to be installed
+
 *embedly-1.9.0 (21 Jan 2014)
 	15 Jan 2014: Roman Shterenzon <romanbsd@yahoo.com>
 	Adds a Faraday request adapter
