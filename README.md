@@ -21,7 +21,7 @@ If you would like cutting edge, then you can clone and install HEAD.
 
 ## Requirements
 
-* querystring <https://github/dokipen/querystring>
+* querystring <https://github.com/dokipen/ruby-querystring>
 
 ## Getting Started
 
