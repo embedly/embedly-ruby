@@ -69,18 +69,21 @@ class Embedly::API
       :scheme => :query_string)
     # our implementation is broken for header authorization, thus the
     # query_string
+    logger.debug "Calling with OAuth %s" % [path]
+    req = consumer.create_signed_request(:get, path)
+    signedpath = req.path
 
-    access_token = OAuth::AccessToken.new consumer
-    logger.debug { "calling #{site}#{path} with headers #{headers} via OAuth" }
-    access_token.get path, headers
+    logger.debug { "calling #{site}#{signedpath} with headers #{headers} using #{request}" }
+    uri = URI.join(hostname, signedpath)
+    request.get(uri, :headers => headers, :timeout => @timeout, :proxy => @proxy)
   end
 
   def _do_call path
     if key and secret
       _do_oauth_call path
     else
-      logger.debug { "calling #{site}#{path} with headers #{headers} using #{request}" }
       uri = URI.join(hostname, path)
+      logger.debug { "calling #{uri} with headers #{headers} using #{request}" }
       request.get(uri, :headers => headers, :timeout => @timeout, :proxy => @proxy)
     end
   end
