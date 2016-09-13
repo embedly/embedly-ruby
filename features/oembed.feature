@@ -10,12 +10,9 @@ Feature: OEmbed
         Then the provider_url should be <provider_url>
 
         Examples:
-            | url                                                                              | provider_url               |
-            | http://www.scribd.com/doc/13994900/Easter                                        | http://www.scribd.com/     |
-            | http://www.scribd.com/doc/28452730/Easter-Cards                                  | http://www.scribd.com/     |
-            | http://www.youtube.com/watch?v=Zk7dDekYej0                                       | http://www.youtube.com/    |
-            | http://yfrog.com/h7qqespj                                                        | http://yfrog.com           |
-            | http://blog.embed.ly/bob                                                         | http://tumblr.com          |
+            | url                                         | provider_url             |
+            | https://www.youtube.com/watch?v=Zk7dDekYej0 | https://www.youtube.com/ |
+            | https://placekitten.com/200/300             | https://placekitten.com  |
 
 
     Scenario Outline: Get the types
@@ -24,11 +21,10 @@ Feature: OEmbed
         Then the type should be <type>
 
         Examples:
-            | url                                                          | type  |
-            | http://www.scribd.com/doc/13994900/Easter                    | rich  |
-            | http://www.scribd.com/doc/28452730/Easter-Cards              | rich  |
-            | http://www.youtube.com/watch?v=Zk7dDekYej0                   | video |
-            | http://yfrog.com/h7qqespj                                    | photo |
+            | url                                         | type  |
+            | https://github.com/embedly/embedly-ruby     | link  |
+            | http://www.youtube.com/watch?v=Zk7dDekYej0  | video |
+            | https://placekitten.com/200/300             | photo |
 
 
     Scenario Outline: Get the provider_url with force flag
@@ -37,8 +33,8 @@ Feature: OEmbed
         Then the provider_url should be <provider_url>
 
         Examples:
-            | url                                                          | provider_url            |
-            | http://www.youtube.com/watch?v=Zk7dDekYej0                   | http://www.youtube.com/ |
+            | url                                         | provider_url             |
+            | https://www.youtube.com/watch?v=Zk7dDekYej0 | https://www.youtube.com/ |
 
 
     Scenario Outline: Get multiple provider_urls
@@ -47,9 +43,9 @@ Feature: OEmbed
         Then provider_url should be <provider_urls>
 
         Examples:
-            | urls                                                                                      | provider_urls                                 |
-            | http://www.scribd.com/doc/13994900/Easter,http://www.scribd.com/doc/28452730/Easter-Cards | http://www.scribd.com/,http://www.scribd.com/ |
-            | http://www.youtube.com/watch?v=Zk7dDekYej0,http://yfrog.com/h7qqespj                      | http://www.youtube.com/,http://yfrog.com      |
+            | urls                                                                                    | provider_urls                                     |
+            | https://www.youtube.com/watch?v=jNQXAC9IVRw,https://www.youtube.com/watch?v=dQw4w9WgXcQ | https://www.youtube.com/,https://www.youtube.com/ |
+            | https://www.youtube.com/watch?v=Zk7dDekYej0,https://placekitten.com/200/300             | https://www.youtube.com/,https://placekitten.com  |
 
 
     Scenario Outline: Attempt to get 404 URL
@@ -60,9 +56,9 @@ Feature: OEmbed
         And type should be error
 
         Examples:
-            | url                                                              |
-            | http://www.youtube.com/watch/is/a/bad/url                        |
-            | http://fav.me/alsfsdf                                            |
+            | url                                       |
+            | http://www.youtube.com/watch/is/a/bad/url |
+            | https://fav.me/alsfsdf                    |
 
 
     Scenario Outline: Attempt multi get 404 URLs
@@ -72,10 +68,10 @@ Feature: OEmbed
         And type should be <types>
 
         Examples:
-            | urls                                                                             | errcode | types       |
-            | http://www.youtube.com/watch/a/bassd/url,http://www.youtube.com/watch/ldf/asdlfj | 404,404 | error,error |
-            | http://www.youtube.com/watch/zzzzasdf/kl,http://yfrog.com/h7qqespj               | 404,    | error,photo |
-            | http://yfrog.com/h7qqespj,http://www.youtube.com/watch/asdfasdf/asdf             | ,404    | photo,error |
+            | urls                                                                              | errcode | types       |
+            | https://www.youtube.com/watch/a/bassd/url,http://www.youtube.com/watch/ldf/asdlfj | 404,404 | error,error |
+            | https://www.youtube.com/watch/zzzzasdf/kl,http://placekitten.com/g/200/300        | 404,    | error,photo |
+            | https://placekitten.com/200/300,https://www.youtube.com/watch/asdfasdf/asdf       | ,404    | photo,error |
 
     Scenario Outline: Attempt to get 414 URL
         Given an embedly api with key
