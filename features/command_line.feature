@@ -3,10 +3,10 @@ Feature: Command line runner
   I want to call the the embedly api via command line
 
   Scenario: Run oembed command
-    When I run `embedly_oembed http://lockerz.com/s/136425091`
+    When I run `embedly_oembed https://placekitten.com/200/300`
     Then the output should contain:
       """
-      "provider_url": "http://pics.lockerz.com"
+      "provider_url": "https://placekitten.com"
       """
 
   Scenario: Run oembed command verbosely
