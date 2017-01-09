@@ -3,7 +3,7 @@ require 'ostruct'
 class Embedly::EmbedlyObject < OpenStruct
 
   # Resursively make ostruct
-  def initialize obj
+  def initialize(obj = nil)
     if obj
       o = obj.clone
       o.each do |k,v|
