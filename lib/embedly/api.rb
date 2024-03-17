@@ -54,7 +54,7 @@ class Embedly::API
     @secret = opts[:secret] == "" ? nil : opts[:secret]
     @api_version = Hash.new('1')
     @api_version.merge!({:objectify => '2'})
-    @hostname = opts[:hostname] || 'http://api.embed.ly'
+    @hostname = opts[:hostname] || 'https://api.embedly.com'
     @timeout = opts[:timeout] || 180
     @headers = {
       'User-Agent' => opts[:user_agent] || "Mozilla/5.0 (compatible; embedly-ruby/#{Embedly::VERSION};)"
